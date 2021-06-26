@@ -1,0 +1,118 @@
+ul {
+    list-style-type: none;
+    
+    padding: 0;
+    overflow: hidden;
+    background-color:black;
+
+    
+    margin: auto;
+
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 18px 20px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #0000FF;
+}
+
+.active {
+    background-color: #9F79EE;
+}
+
+.footer
+{
+  background-color:black;
+  color:white;
+  padding:  5px 5px 1px 5px;
+}
+
+
+
+.content {
+  max-width: 500px;
+  margin: auto;
+}
+
+.success {
+  color: green;
+display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+}
+
+.error {
+  color: red;
+display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+}
+.answerselect {
+   height:50px;
+    width:200px;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+}
+
+.centers {
+  /*margin: auto;
+  width: 50%;
+  border: 3px solid black;
+  padding: 10px;*/
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 5px solid black;
+  padding: 10px;
+  
+}
+
+.questionbox {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+}
+.play {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+}
+
+.boxes{
+  display: inline-block; 
+  margin-right: 200px;
+  
+  border: 3px solid black;
+ 
+}
+
+.pageform{
+display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+border: 3px solid black;
+}
+
+
+
