@@ -20,7 +20,7 @@
     </div>
     <div class="col-sm border border-secondary">
    
-    <form method="POST" action="<?php echo base_url(); ?>index.php/login/login">
+    <form method="POST" action="<?php echo base_url(); ?>index.php/User/login">
     		            	<fieldset>
     		                	<div class="form-group">
     		                    	<input class="form-control" placeholder="Email"  name="email" required>
