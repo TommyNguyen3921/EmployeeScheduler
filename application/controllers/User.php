@@ -30,10 +30,10 @@
     		$password = $_POST['password'];
      
     		$data = $this->users_model->login($email, $password);
-     
+			$data2['level'] = $this->users_model->navlevel($email, $password);
     		if($data){
     			$this->session->set_userdata('user', $data);
-    			redirect('home');
+    			$this->template->show('home',$data2);
     		}
     		else{
     			header('location:'.base_url().$this->index());
