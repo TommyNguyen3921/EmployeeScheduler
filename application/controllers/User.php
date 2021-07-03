@@ -12,14 +12,14 @@
     	public function index(){
     		//load session library
     		$this->load->library('session');
-     
+			$data2['level'] = $this->session->userdata('access');
     		//restrict users to go back to login if session has been set
-    		if($this->session->userdata('user')){
-    			redirect('login');
-    		}
-    		else{
-    			$this->load->view('home');
-    		}
+    		//if($this->session->userdata('user')){
+    			//redirect('login');
+    		//}
+    		//else{
+    			$this->template->show('home',$data2);
+    		//}
     	}
      
     	public function login(){
@@ -31,8 +31,12 @@
      
     		$data = $this->users_model->login($email, $password);
 			$data2['level'] = $this->users_model->navlevel($email, $password);
+			$accesslevel = $data2['level'];
+			$this->session->set_userdata('access',$accesslevel);
+
+			
     		if($data){
-    			$this->session->set_userdata('user', $data);
+    			$this->session->set_userdata('home', $data);
     			$this->template->show('home',$data2);
     		}
     		else{
