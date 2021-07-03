@@ -18,6 +18,10 @@
 
 				
     		}
-     
+			public function Sendreport($user, $topic,$description){
+               
+				$query = $this->db->query("INSERT INTO bugreport (memberID,topic,message) VALUES ('$user', '$topic', '$description');");
+		   
+		}
     	}
     ?>
