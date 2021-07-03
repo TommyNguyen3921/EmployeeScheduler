@@ -9,7 +9,7 @@ class Empreport extends CI_Controller {
   {
     parent::__construct();
     $this->load->helper('url');
-    $this->load->model('report_model');
+    $this->load->model('reports_model');
   }
 
   public function index()
@@ -25,7 +25,7 @@ class Empreport extends CI_Controller {
     		$topic = $_POST['topic'];
         $description = $_POST['description'];
      
-    		$data = $this->report_model->Sendreport($user, $topic,$description);
+    		$data = $this->reports_model->Sendreport($user, $topic,$description);
 
         $data2['level'] = $this->session->userdata('access');
         $this->template->show('empreport',$data2);
