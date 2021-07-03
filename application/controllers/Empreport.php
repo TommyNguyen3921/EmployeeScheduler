@@ -14,7 +14,7 @@ class Empreport extends CI_Controller {
 
   public function index()
   {
-/**sdfdsfd */
+/**sdfdsffghgfd */
     $this->load->library('session');
 			$data2['level'] = $this->session->userdata('access');
     $this->template->show('empreport',$data2);
