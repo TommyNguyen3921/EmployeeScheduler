@@ -9,7 +9,7 @@ class Empreport extends CI_Controller {
   {
     parent::__construct();
     $this->load->helper('url');
-    $this->load->model('reports_model');
+    $this->load->model('Reports_model');
   }
 
   public function index()
