@@ -16,7 +16,7 @@ class Empreport extends CI_Controller {
   {
 /**sdfdsffghgfd */
     $this->load->library('session');
-			$data2['level'] = $this->session->userdata('access');
+			$data2['test'] = $this->session->userdata('access');
     $this->template->show('empreport',$data2);
   }
 
@@ -27,7 +27,7 @@ class Empreport extends CI_Controller {
      
     		$data = $this->users_model->Sendreport($user, $topic,$description);
 
-        $data2['level'] = $this->session->userdata('access');
+        $data2['test'] = $this->session->userdata('access');
         $this->template->show('empreport',$data2);
   }
 }

@@ -9,4 +9,4 @@
  <body>
 
 
-<h1>Tommy</h1>
+<h1> <?= $test[0]['name'] ?></h1>

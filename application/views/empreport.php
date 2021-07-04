@@ -5,8 +5,8 @@
 <form method="POST" action="<?php echo base_url(); ?>index.php/Empreport/report">
 
 <div class="form-group">
-    <label for="exampleFormControlInput1">Email address</label>
-    <input type="text" class="form-control" id="exampleFormControlInput1" name="user"value="1">
+    <label for="exampleFormControlInput1">Send By</label>
+    <input type="text" class="form-control" id="exampleFormControlInput1" name="user"value="<?= $test[0]['name'] ?>" readonly>
   </div>
   <div class="form-group">
     <label for="exampleFormControlInput1">Topic</label>

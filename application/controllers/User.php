@@ -12,13 +12,13 @@
     	public function index(){
     		//load session library
     		$this->load->library('session');
-			$data2['level'] = $this->session->userdata('access');
+			$data1['test'] = $this->session->userdata('access');
     		//restrict users to go back to login if session has been set
     		//if($this->session->userdata('user')){
     			//redirect('login');
     		//}
     		//else{
-    			$this->template->show('home',$data2);
+    			$this->template->show('home',$data1);
     		//}
     	}
      
@@ -30,14 +30,18 @@
     		$password = $_POST['password'];
      
     		$data = $this->users_model->login($email, $password);
-			$data2['level'] = $this->users_model->navlevel($email, $password);
-			$accesslevel = $data2['level'];
+			$data1['test'] = $this->users_model->checklogin($email, $password);
+			$testdata  = $data1['test'];
+			print_r($testdata[0]['level']);
+			
+			
+			$accesslevel = $data1['test'];
 			$this->session->set_userdata('access',$accesslevel);
 
 			
     		if($data){
-    			$this->session->set_userdata('home', $data);
-    			$this->template->show('home',$data2);
+    			$this->session->set_userdata('home', $data1);
+    			$this->template->show('home',$data1);
     		}
     		else{
     			header('location:'.base_url().$this->index());
