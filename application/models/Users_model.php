@@ -21,6 +21,7 @@
                
 			$this->db->select('member.name')
 			->select('member.level')
+			->select('member.memberID')
             ->from('member')
             ->join('login', 'login.loginID = member.memberID') 
             ->where('username', $email)
@@ -31,6 +32,20 @@
 		return $query->result_array();
 	   
 	}
+
+	public function loadreport(){
+               
+		$this->db->select('member.name')
+			->select('bugreport.topic')
+            ->from('bugreport')
+            ->join('member', 'member.memberID = bugreport.memberID') ;
+          
+			
+        $query = $this->db->get();
+	
+		return $query->result_array();
+   
+}
 		
     	}
     ?>

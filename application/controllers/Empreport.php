@@ -14,7 +14,7 @@ class Empreport extends CI_Controller {
 
   public function index()
   {
-/**sdfdsffghgfd */
+
     $this->load->library('session');
 			$data2['test'] = $this->session->userdata('access');
     $this->template->show('empreport',$data2);
@@ -24,8 +24,8 @@ class Empreport extends CI_Controller {
         $user = $_POST['user'];
     		$topic = $_POST['topic'];
         $description = $_POST['description'];
-     
-    		$data = $this->users_model->Sendreport($user, $topic,$description);
+     $memberdata = $this->session->userdata('memberIDE');
+    		$data = $this->users_model->Sendreport($memberdata, $topic,$description);
 
         $data2['test'] = $this->session->userdata('access');
         $this->template->show('empreport',$data2);

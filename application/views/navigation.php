@@ -29,7 +29,7 @@
  <li><a href="<?= base_url(); ?>index.php?/About">Set up Schedule2</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Home">Analysis2</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Search">Create Accoun2t</a></li>
- <li><a href="<?= base_url(); ?>index.php?/Empreport">&#x21</a></li>
+ <li><a href="<?= base_url(); ?>index.php?/Admreport">&#x21</a></li>
  <li><a href="<?= base_url(); ?>index.php?/User/Logout">Log Out2</a></li>
  <?php } ?>
 </ul>

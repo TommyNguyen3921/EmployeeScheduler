@@ -32,9 +32,9 @@
     		$data = $this->users_model->login($email, $password);
 			$data1['test'] = $this->users_model->checklogin($email, $password);
 			$testdata  = $data1['test'];
-			print_r($testdata[0]['level']);
+			print_r($testdata[0]['memberID']);
 			
-			
+			$this->session->set_userdata('memberIDE',$testdata[0]['memberID']);
 			$accesslevel = $data1['test'];
 			$this->session->set_userdata('access',$accesslevel);
 
