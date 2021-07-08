@@ -24,6 +24,25 @@ class Admreport extends CI_Controller {
 			print_r($data2);
     $this->template->show('admreport',$data2);
   }
-/**dsfsdf */
 
+  public function bugsolve($reportid)
+  {
+    
+    $this->users_model->dosolve($reportid);
+
+    $this->index();
+  }
+
+  public function moreinfo($reportid)
+  {
+
+    $this->load->library('session');
+			$data2['test'] = $this->session->userdata('access');
+
+      $data2['reportsinfo'] = $this->users_model->showmoreinfo($reportid);
+
+            
+		
+    $this->template->show('admreportinfo',$data2);
+  }
 }
