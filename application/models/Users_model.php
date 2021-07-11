@@ -64,6 +64,27 @@ function showmoreinfo($reportid){
 	
 		return $query->result_array();
 }
+
+
+public function loadchat(){
+               
+	$this->db->select('member.name')
+		->select('chatmessage.messagedata')
+		->from('chatmessage')
+		->join('member', 'member.memberID = chatmessage.memberID') ;
+	  
+		
+	$query = $this->db->get();
+
+	return $query->result_array();
+
+}
+
+public function sendmessage($memberID,$message){
+               
+	$query = $this->db->query("INSERT INTO chatmessage (memberID,messagedata) VALUES ('$memberID', '$message');");
+
+}
 		
     	}
     ?>
