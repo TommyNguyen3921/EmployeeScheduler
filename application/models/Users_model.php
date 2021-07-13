@@ -85,6 +85,36 @@ public function sendmessage($memberID,$message){
 	$query = $this->db->query("INSERT INTO chatmessage (memberID,messagedata) VALUES ('$memberID', '$message');");
 
 }
+
+//---------------------------------------create account page
+public function loadaccounts(){
+               
+	$this->db->select('member.name')
+		->select('member.level')
+		->select('member.memberID')
+		->select('login.username')
+		->select('login.password')
+		->from('login')
+		->join('member', 'member.memberID = login.loginID') ;
+	  
+		
+	$query = $this->db->get();
+
+	return $query->result_array();
+
+}
+
+public function addaccount($name,$user,$password,$level){
+               
+	$query = $this->db->query("INSERT INTO login (username,password) VALUES ('$user', '$password');");
+	$query = $this->db->query("INSERT INTO member (name,level) VALUES ('$name', '$level');");
+}
+
+
+function dodelete($memberID){
+	$this->db->query("DELETE FROM member where memberID = '$memberID';");
+	$this->db->query("DELETE FROM login where loginID = '$memberID';");
+}
 		
     	}
     ?>
