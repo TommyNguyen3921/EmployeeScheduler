@@ -115,6 +115,69 @@ function dodelete($memberID){
 	$this->db->query("DELETE FROM member where memberID = '$memberID';");
 	$this->db->query("DELETE FROM login where loginID = '$memberID';");
 }
+
+//---------------------------------------Forum Page page
+
+function doNewPost($topic, $discussion,$memberdata){
+	$this->db->query("INSERT INTO forumtopic (topic) VALUES ( '$topic');");
+
+	$this->db->select('topicID')
+		->from('forumtopic')
+		->order_by('topicID', 'DESC')
+		->limit(1);
+		
+	$query = $this->db->get();
+
+	$result = $query->result_array();
+	$topicid =$result[0]["topicID"];
+	$this->db->query("INSERT INTO forummessage (topicID,memberID,messageforum) VALUES ('$topicid','$memberdata','$discussion');");
+}
+
+public function loadposts(){
+               
+	$this->db->select('topic')
+		->select('topicID')
+		
+		->from('forumtopic');
+	
+	  
+		
+	$query = $this->db->get();
+
+	return $query->result_array();
+
+}
+
+function forumdetail($topicID){
+	$this->db->select('forumtopic.topic')
+			->select('forummessage.messageforum')
+			->select('member.name')
+            ->from('forumtopic')
+            ->join('forummessage', 'forummessage.topicID = forumtopic.topicID') 
+			->join('member', 'member.memberID = forummessage.memberID')
+			->where('forumtopic.topicID', $topicID);
+			
+        $query = $this->db->get();
+	
+		return $query->result_array();
+}
+function forumdetailadd($memberdata,$forumID,$message){
+	$this->db->query("INSERT INTO forummessage (topicID,memberID,messageforum) VALUES ('$forumID','$memberdata','$message');");
+}
+public function dosearch($search){
+               
+	$this->db->select('topic')
+		->select('topicID')
+		
+		->from('forumtopic')
+		->like('topic', $search);
+	  
+		
+	$query = $this->db->get();
+
+	return $query->result_array();
+
+}
 		
     	}
     ?>
