@@ -127,3 +127,5 @@ textarea {
 form { margin: 70px;
   border: 1px solid black;}
 
+#update { display: none; }
+

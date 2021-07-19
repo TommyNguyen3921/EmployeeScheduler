@@ -164,6 +164,7 @@ function forumdetail($topicID){
 function forumdetailadd($memberdata,$forumID,$message){
 	$this->db->query("INSERT INTO forummessage (topicID,memberID,messageforum) VALUES ('$forumID','$memberdata','$message');");
 }
+
 public function dosearch($search){
                
 	$this->db->select('topic')
@@ -178,6 +179,144 @@ public function dosearch($search){
 	return $query->result_array();
 
 }
+//---------------------------------------Analysis page		
+
+public function getmembers(){
+               
+	$this->db->select('memberID')
+			->select('name')
+		->from('member');
 		
+	  
+		
+	$query = $this->db->get();
+
+	return $query->result_array();
+
+}
+
+public function getmembersinfo($memberID){
+               
+	
+	$this->db->select('*')
+		->from('stat')
+		->where('memberID', $memberID["memberID"]);
+	  
+		
+	$query = $this->db->get();
+	
+	return $query->result_array();
+
+}
+public function doadddetails($data){
+               
+	
+	
+
+
+	$data1 = array(
+        'memberID' => $data['user'],
+        'Date' => $data['date'],
+		'shiftchanges' => $data['change'],
+		'latetoshift' => $data['lates'],
+		'pay' => $data['pay'],
+        'hours' => $data["hours"]
+);
+
+$this->db->insert('stat', $data1);
+
+$this->db->select('*')
+		->from('stat')
+		->where('memberID', $data1["memberID"]);
+	  
+		
+	$query = $this->db->get();
+	
+	return $query->result_array();
+
+}
+public function dodeletestat($statID){
+               
+	
+	$this->db->where('statID', $statID["statID"]);
+$this->db->delete('stat');
+
+
+$this->db->select('*')
+		->from('stat')
+		->where('memberID', $statID["user"]);
+	  
+		
+	$query = $this->db->get();
+	
+	return $query->result_array();
+
+
+
+}
+
+public function doupdate($statID){
+               
+	
+
+
+
+$this->db->select('*')
+		->from('stat')
+		->where('statID', $statID["statID"]);
+	  
+		
+	$query = $this->db->get();
+	
+	return $query->result_array();
+
+
+
+}
+
+public function doupdatevalue($data){
+               
+	
+
+	$data1 = array(
+        'memberID' => $data['user'],
+        'Date' => $data['date'],
+		'shiftchanges' => $data['change'],
+		'latetoshift' => $data['lates'],
+		'pay' => $data['pay'],
+        'hours' => $data["hours"]
+);
+
+$this->db->where('statID', $data["statid"]);
+$this->db->update('stat', $data1);
+	
+$this->db->select('*')
+		->from('stat')
+		->where('memberID', $data["user"]);
+	  
+		
+	$query = $this->db->get();
+	
+	return $query->result_array();
+	
+	
+	}
+
+	public function loadanalysis($member){
+               
+		$this->db->select('*')
+		->from('stat')
+		->where('memberID', $member);
+
+		  
+			
+		$query = $this->db->get();
+		
+		return $query->result_array();
+		
+		
+		}
+	
+
     	}
     ?>

@@ -54,7 +54,8 @@ class Forum extends CI_Controller {
     		$this->users_model->doNewPost($topic, $discussion,$memberdata);
             
 			
-    $this->template->show('addpost',$data2);
+    //$this->template->show('addpost',$data2);
+    $this->index();
   }
   public function foruminfo($topicID)
   {
