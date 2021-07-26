@@ -21,7 +21,7 @@ class Createacc extends CI_Controller {
             $data2['accounts'] = $this->users_model->loadaccounts();
 
             
-			print_r($data2);
+			//print_r($data2);
     $this->template->show('createacc',$data2);
   }
 
@@ -36,7 +36,7 @@ public function create(){
 
     $this->users_model->addaccount($name,$user,$password,$level);
         
-	print_r($level);
+	//print_r($level);
     
     $this->index();
 }
