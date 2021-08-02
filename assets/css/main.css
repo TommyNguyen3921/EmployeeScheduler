@@ -129,3 +129,6 @@ form { margin: 70px;
 
 #update { display: none; }
 
+th {
+  text-align: center;
+}
