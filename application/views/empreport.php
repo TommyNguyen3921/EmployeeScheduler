@@ -1,8 +1,11 @@
 <h2>Report Bug</h2>
 
 
-   
-<form method="POST" action="<?php echo base_url(); ?>index.php/Empreport/report">
+<h3 class="error"><?php echo validation_errors(); ?></h3>
+<?php if ($success) { ?>
+  <h3 class="success">Report Sent</h3>
+<?php }?>
+<form method="POST" action="<?php echo base_url(); ?>index.php/Empreport/report" >
 
 <div class="form-group">
     <label for="exampleFormControlInput1">Send By</label>
@@ -20,3 +23,8 @@
   </div>
   <button type="submit" class="btn btn-lg btn-primary btn-block"><span class="glyphicon glyphicon-log-in"></span> Submit</button>
 </form>
+
+
+
+
+  

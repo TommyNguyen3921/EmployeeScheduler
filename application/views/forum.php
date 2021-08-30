@@ -22,22 +22,22 @@
             </div>
         </div>
         <div class="col-md-2">
-            <div class="solid">
+            
             <h1>
-                <a style="display:block" href=" <?= base_url() ?>index.php?/Forum/addpost">
+                <a class="btn btn-success " style="display:block" href=" <?= base_url() ?>index.php?/Forum/addpost">
                     ADD
                 </a>
                 </h1>
-            </div>
+            
         </div>
     </div>
 </div>
 
-
+<h1>Forum Topics</h1>
 <?php foreach ($posts as $row) { ?>
 
-    <div class="solid">
-<a style="display:block" href=" <?= base_url() ?>index.php?/Forum/foruminfo/<?= $row['topicID']?>">
+    <div class="solid reportbox">
+<a id="reportboxinfo" style="display:block" href=" <?= base_url() ?>index.php?/Forum/foruminfo/<?= $row['topicID']?>">
 <?= $row['topic']?>
 </a>
 </div>

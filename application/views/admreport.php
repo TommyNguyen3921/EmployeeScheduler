@@ -3,20 +3,28 @@
 <?php if (empty($reports)){ ?>
     <h2>No Bugs reported</h2>
 <?php } ?>
+
+<?php if (!empty($reports)){ ?>
+    <h1 class="reporttitle">Sent by</h1>
+<h1 class="reporttitle">Topic</h1>
+<?php } ?>
+
+
+<div class="reportbox">
 <?php foreach ($reports as $row) { ?>
-<div >
+<div class="report">
     <div class="row">
         
         <div class="col-md-9">
         <div class="solid">
           
             
-                
+        
                 
                     
                 
-                    <a style="display:block" href=" <?= base_url() ?>index.php?/Admreport/moreinfo/<?= $row['reportID']?>">
-  <div class="xyz"><?= $row['name']?><p><td><?= $row['topic']?></div>
+                    <a  id="reportboxinfo"  href=" <?= base_url() ?>index.php?/Admreport/moreinfo/<?= $row['reportID']?>">
+  <div ><p class="reporttitle"><?= $row['name']?></p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p class="reporttitle"><?= $row['topic']?></p></div>
 </a>
 
                
@@ -26,9 +34,9 @@
         </div>
         </div>
         <div class="col-md-2">
-            <div>
+            <div class="solid">
                 <a href=" <?= base_url() ?>index.php?/Admreport/bugsolve/<?= $row['reportID']?>">
-                    completed
+                &#9745;
                 </a>
                 
             </div>
@@ -37,3 +45,4 @@
 </div>
 <?php } ?>
 
+</div>

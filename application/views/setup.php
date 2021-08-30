@@ -154,5 +154,5 @@
 </table>
 
 <form form method="POST" action="<?php echo base_url(); ?>index.php/Setup/reset">
-<button type="submit">Click Me!</button> 
+<button type="submit">Reset</button> 
 </form>

@@ -109,12 +109,32 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
+	public function checkduplicate($user)
+	{
+
+		 $this->db->select('username')
+			->from('login')
+			->where('username', $user);
+			$query = $this->db->get();
+        $user1 = $query->row_array();
+        print_r($user1);
+        if($user1 != ''){
+            return false;
+
+        }else{
+             return true;
+        }
+	}
+
 	public function addaccount($name, $user, $password, $level)
 	{
 
 		$query = $this->db->query("INSERT INTO login (username,password) VALUES ('$user', '$password');");
 		$query = $this->db->query("INSERT INTO member (name,level) VALUES ('$name', '$level');");
+		if($level == 0){
+            
 
+        
 		$this->db->select('memberID')
 			->from('member')
 			->where('name', $name);;
@@ -133,13 +153,40 @@ class Users_model extends CI_Model
 		$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Friday', '0', '0');");
 		$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Saturday', '0', '0');");
 	}
+	}
 
 
 	function dodelete($memberID)
 	{
-		$this->db->query("DELETE FROM member where memberID = '$memberID';");
+
+		$this->db->select('level')
+		->from('member')
+		->where('memberID', $memberID);
+
+		$query = $this->db->get();
+
+		$result = $query->row_array();
+		//print_r($result['level']);
+
+		$this->db->where('level =',$result['level']);
+         
+		$query2 = $this->db->get('member');
+         
+		$result2 = $query2->num_rows();
+
+		
+
+		if(($result['level'] == 1 or $result['level'] == 2) and $result2 == 1){
+            
+			return true;
+        }else{
+			
+             $this->db->query("DELETE FROM member where memberID = '$memberID';");
 		$this->db->query("DELETE FROM login where loginID = '$memberID';");
 		$this->db->query("DELETE FROM scheduler where memberID = '$memberID';");
+        }
+
+		
 	}
 
 	//---------------------------------------Forum Page page
@@ -215,8 +262,8 @@ class Users_model extends CI_Model
 
 		$this->db->select('memberID')
 			->select('name')
-			->from('member');
-
+			->from('member')
+			->where('level', 0);
 
 
 		$query = $this->db->get();
@@ -345,7 +392,8 @@ class Users_model extends CI_Model
 
 		$this->db->select('memberID')
 			->select('name')
-			->from('member');
+			->from('member')
+			->where('level', 0);
 
 
 

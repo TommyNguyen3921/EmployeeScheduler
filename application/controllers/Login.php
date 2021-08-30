@@ -13,6 +13,7 @@ class Login extends CI_Controller {
 
   public function index()
   {
-    $this->load->view('login');
+    $data1['error'] = false;
+    $this->load->view('login',$data1);
   }
 }

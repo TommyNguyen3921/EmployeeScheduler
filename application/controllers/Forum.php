@@ -71,7 +71,7 @@ class Forum extends CI_Controller {
      $this->session->set_userdata('forum',$topicID);
 
      $test = $this->session->userdata('forum');
-     print_r($test);
+     print_r($data2);
     $this->template->show('foruminfo',$data2);
   }
 

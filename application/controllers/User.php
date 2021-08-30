@@ -7,6 +7,7 @@
     		parent::__construct();
     		$this->load->helper('url');
     		$this->load->model('users_model');
+			
     	}
      
     	public function index(){
@@ -26,26 +27,32 @@
     		//load session library
     		$this->load->library('session');
      
+
+			
+
     		$email = $_POST['email'];
     		$password = $_POST['password'];
      
     		$data = $this->users_model->login($email, $password);
-			$data1['test'] = $this->users_model->checklogin($email, $password);
-			$testdata  = $data1['test'];
-			print_r($testdata[0]['memberID']);
-			
-			$this->session->set_userdata('memberIDE',$testdata[0]['memberID']);
-			$accesslevel = $data1['test'];
-			$this->session->set_userdata('access',$accesslevel);
+		
 
 			
     		if($data){
+				$data1['test'] = $this->users_model->checklogin($email, $password);
+				$testdata  = $data1['test'];
+				//print_r($testdata[0]['memberID']);
+				
+				$this->session->set_userdata('memberIDE',$testdata[0]['memberID']);
+				$accesslevel = $data1['test'];
+				$this->session->set_userdata('access',$accesslevel);
     			$this->session->set_userdata('home', $data1);
     			$this->template->show('home',$data1);
     		}
     		else{
-    			header('location:'.base_url().$this->index());
-    			$this->session->set_flashdata('error','Invalid login. User not found');
+				$data1['error'] = true;
+    			$this->load->view('login',$data1);
+				
+    			
     		} 
     	}
      

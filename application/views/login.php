@@ -7,19 +7,28 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="<?= assetUrl(); ?>css/main.css">
+    <link rel="stylesheet" type="text/css" href="<?= assetUrl(); ?>css/login.css">
     <title>Management</title>
   </head>
   <body>
 
-<div class="centers">
-  <div class="container">
-  <div class="row">
-    <div class="col-sm border border-secondary" >
-    <img src="<?= assetUrl() ?>/img/headerIMG.png" class="center">
-    </div>
-    <div class="col-sm border border-secondary">
-   
+<div class="container" id="container">
+
+
+	<div class="overlay-container">
+		<div class="overlay">
+		
+			<div class="overlay-panel overlay-right">
+      <img src="<?= assetUrl() ?>/img/headerIMG.png" class="center">
+			</div>
+		</div>
+	</div>
+  
+  <div class="form-container sign-in-container">
+  <?php if ($error) { ?>
+  <h3 class="error">Invalid credentials.</h3>
+<?php }?>
+
     <form method="POST" action="<?php echo base_url(); ?>index.php/User/login">
     		            	<fieldset>
     		                	<div class="form-group">
@@ -31,12 +40,8 @@
     		                	<button type="submit" class="btn btn-lg btn-primary btn-block"><span class="glyphicon glyphicon-log-in"></span> Login</button>
     		            	</fieldset>
     		        	</form>
-    </div>
-    
-  </div>
+	</div>
 </div>
-</div>
-
 
   </body>
 </html>

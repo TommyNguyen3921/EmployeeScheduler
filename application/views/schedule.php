@@ -143,7 +143,7 @@
   </table>
 </div>
 
-<button type='submit' class='like' id='test'>test</button>
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type='text/javascript'>
@@ -224,40 +224,7 @@
       });
     });
 
-    $(function() {
-      $(document).on("click", '#test', function() {
 
-
-        var t = $('#tabletest');
-
-        // jQuery to get the content of row 4, column 1
-        //var val1 = $(t[0].rows[1].cells[0]).html("new");  
-        //var val2 = $(t[0].rows[1].cells[0]).text();  
-        //alert(val2);
-        //var val2 = $(t[0].rows[0].cells[0]).text();  
-        //alert(val2);
-
-        var name;
-        var i = 1;
-        while (name != "Curlytv") {
-          name = $(t[0].rows[i].cells[0]).text();
-          i++;
-        }
-
-        var date;
-        var s = 1;
-        while (date != "Monday") {
-          date = $(t[0].rows[0].cells[s]).text();
-          s++;
-        }
-
- var val1 = $(t[0].rows[1].cells[0]).html("new");  
-        var val2 = $(t[0].rows[1].cells[0]).text();  
-        alert(val2);
-
-
-      });
-    });
 
   });
 </script>

@@ -1,6 +1,12 @@
 
 <h1>Create Account</h1>
-
+<?php if ($error) { ?>
+  <h3 class="error">Username already Exist.</h3>
+<?php }?>
+<?php if ($success) { ?>
+  <h3 class="success">Successfully Created.</h3>
+<?php }?>
+<h3 class="error"><?php echo validation_errors(); ?></h3>
 <form method="POST" action="<?php echo base_url(); ?>index.php/Createacc/create">
   <div class="form-group">
     <label for="formGroupExampleInput">Full Name</label>
@@ -25,6 +31,12 @@
   </div>
   <button type="submit" class="btn btn-lg btn-primary btn-block"><span class="glyphicon glyphicon-log-in"></span> Submit</button>
 </form>
+
+
+<?php if ($deletecheck) { ?>
+  <h3 class="error">Cannot delete if only 1 Manager or Adminstrator</h3>
+<?php }?>
+
 <h2>User Table</h2>
 <table class="table table-striped">
 
