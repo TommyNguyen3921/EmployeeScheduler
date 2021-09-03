@@ -184,6 +184,8 @@ class Users_model extends CI_Model
 			ON scheduler.scheduleID=pendingshift.scheduleID WHERE scheduler.memberID = ? ";
              $this->db->query($sql, array($memberID));
 			
+			 $this->db->query("DELETE FROM forummessage where memberID = '$memberID';");
+			 $this->db->query("DELETE FROM bugreport where memberID = '$memberID';");
              $this->db->query("DELETE FROM member where memberID = '$memberID';");
 		$this->db->query("DELETE FROM login where loginID = '$memberID';");
 		$this->db->query("DELETE FROM scheduler where memberID = '$memberID';");
