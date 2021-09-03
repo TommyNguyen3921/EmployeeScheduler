@@ -180,6 +180,9 @@ class Users_model extends CI_Model
             
 			return true;
         }else{
+			$sql = "DELETE pendingshift FROM pendingshift JOIN scheduler 
+			ON scheduler.scheduleID=pendingshift.scheduleID WHERE scheduler.memberID = ? ";
+             $this->db->query($sql, array($memberID));
 			
              $this->db->query("DELETE FROM member where memberID = '$memberID';");
 		$this->db->query("DELETE FROM login where loginID = '$memberID';");
@@ -450,9 +453,22 @@ class Users_model extends CI_Model
 	public function doreset()
 	{
 
+		$this->db->where('memberID', 0);
+		$this->db->delete('scheduler');
+
+		$this->db->where('pendingID >', 0);
+		$this->db->delete('pendingshift');
+
+		$this->db->where('openshiftID >', 0);
+		$this->db->delete('openshift');
+
+
 		$this->db->set('startdatetime', '0', FALSE);
 		$this->db->set('enddatetime', '0', FALSE);
 		$this->db->update('scheduler');
+
+		
+
 	}
 
 	//---------------------------------------schedule menu page	
@@ -475,11 +491,30 @@ print_r($query->result_array());
 
 	public function dopending($shiftID)
 	{
-		$data = array(
-			'scheduleID' => $shiftID["shiftID"]
-	);
+
+		$this->db->select('scheduleID')
+			->from('pendingshift')
+			->where('scheduleID', $shiftID["shiftID"]);
+
+
+		$query = $this->db->get();
+
+		$result = $query->row_array();
+
+		if (!empty($result)){
+
+			return false;
+		}else{
+
+			$data = array(
+				'scheduleID' => $shiftID["shiftID"]
+		);
+		
+		$this->db->insert('pendingshift', $data);
+		return true;
+		}
+
 	
-	$this->db->insert('pendingshift', $data);
 
 	}
 
@@ -657,6 +692,35 @@ $this->db->delete('pendingshift');
 
 	public function doopenshiftaccept($openshiftID,$memberdata)
 	{
+		$this->db->select('scheduler.timeofday')
+		
+		->from('scheduler')
+		->join('openshift', 'openshift.scheduleID = scheduler.scheduleID')
+		->where('openshift.openshiftID', $openshiftID["openshiftID"]);
+
+		
+		$check = $this->db->get();
+
+		$shiftcheck = $check->row_array();
+
+
+		$this->db->select('startdatetime')
+		->from('scheduler')
+		->where('memberID', $memberdata)
+		->where('timeofday', $shiftcheck["timeofday"]);
+
+		
+		$check1 = $this->db->get();
+
+		$shiftcheck2 = $check1->row_array();
+
+		
+		
+
+		if($shiftcheck2["startdatetime"] != 0){
+			return false;
+		}else{
+
 
 		$this->db->select('scheduler.enddatetime')
 		->select('scheduler.startdatetime')
@@ -714,6 +778,7 @@ $this->db->delete('pendingshift');
 		$query2 = $this->db->get();
 
 		return $query2->result_array();
+	}
 		
 	}
 }

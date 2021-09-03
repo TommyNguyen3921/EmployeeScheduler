@@ -33,9 +33,9 @@ class Schedule extends CI_Controller {
     $shiftID = $this->input->post();
 
     // get data
-    $this->users_model->dopending($shiftID);
+    $data = $this->users_model->dopending($shiftID);
 
-    
+    echo ($data);
   }
 
   public function openshiftaccept(){

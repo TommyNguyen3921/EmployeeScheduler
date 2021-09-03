@@ -146,6 +146,7 @@
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script type='text/javascript'>
   $(document).ready(function() {
 
@@ -159,13 +160,19 @@
           data: {
             shiftID: shiftid
           },
-          dataType: 'json',
-          success: function() {
-
+          dataType: 'text',
+          success: function(response) {
+            
+            if (response == false){
+              $('#Modalpending').modal('show')
+            }else{
+              $('#Modalsent').modal('show')
+            }
+            
           }
         });
 
-        alert("request sent");
+      
 
       });
     });
@@ -180,6 +187,7 @@
         var e = 0;
         var s = 0;
         $.ajax({
+          context: this,
           url: '<?php echo base_url(); ?>index.php/Schedule/openshiftaccept',
           method: 'post',
           data: {
@@ -187,6 +195,10 @@
           },
           dataType: 'json',
           success: function(response) {
+
+            if (response == false){
+              alert("Already schedule for that day");
+            }else{
             for (var i = 0; i < response.length; i++) {
 
               var Html = "<tr><td>" + response[i].name + "</td><td>" + response[i].timeofday + "</td><td>" + response[i].startdatetime + "/" + response[i].enddatetime + "</td><td><button type='submit' class='like' id='request' value=" + response[i].scheduleID + ">Request Shift Off</button></td></tr>";
@@ -213,13 +225,14 @@
                var val1 = $(t[0].rows[e-1].cells[s-1]).html(response[i].startdatetime + "/" + response[i].enddatetime);  
                var val2 = $(t[0].rows[e-1].cells[s-1]).text();  
             }
-
-
+            $(this).closest('tr').remove();
+          }
+         
           }
 
         });
 
-        $(this).closest('tr').remove();
+        
 
       });
     });
@@ -228,3 +241,38 @@
 
   });
 </script>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="Modalpending" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-body">
+        Request Already Sent and Pending
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+       
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="Modalsent" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-body">
+        Request Sent 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+       
+      </div>
+    </div>
+  </div>
+</div>
