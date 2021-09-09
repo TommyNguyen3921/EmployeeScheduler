@@ -24,7 +24,7 @@ class Setup extends CI_Controller {
 
         $test =   $data2['schedule'];
         
-        print_r($test);
+        //print_r($test);
 		
     $this->template->show('setup',$data2);
   }
@@ -37,7 +37,7 @@ class Setup extends CI_Controller {
 
     $this->users_model->doaddschedule($member,$date,$start,$end);
         
-	print_r($member);
+	//print_r($member);
     
     $this->index();
 }

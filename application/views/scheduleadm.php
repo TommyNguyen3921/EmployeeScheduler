@@ -87,7 +87,7 @@
 
  <tr>
  
- <th  colspan="4">My shift</th>
+ <th  colspan="4">Pending Shift Off</th>
 
 
  
@@ -116,7 +116,7 @@
 
  <tr>
  
- <th  colspan="5">My shift</th>
+ <th  colspan="5">Available shift</th>
 
 
  

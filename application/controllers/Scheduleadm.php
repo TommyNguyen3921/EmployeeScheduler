@@ -23,7 +23,7 @@ class Scheduleadm extends CI_Controller {
       $data2['pending'] =$this->users_model->loadpendingschedule();
 
       $data2['open'] =$this->users_model->loadopenschedule();
-      print_r($data2['pending']);
+      //print_r($data2['pending']);
     $this->template->show('scheduleadm',$data2);
   }
 

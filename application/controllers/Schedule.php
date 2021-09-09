@@ -24,7 +24,7 @@ class Schedule extends CI_Controller {
       $data2['schedule1'] =$this->users_model->doloadscheduleemployee($memberdata);
 
       $data2['open'] =$this->users_model->loadopenschedule();
-			print_r($memberdata);
+			//print_r($memberdata);
     $this->template->show('schedule',$data2);
   }
 

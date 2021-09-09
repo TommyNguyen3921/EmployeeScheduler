@@ -117,7 +117,7 @@ class Users_model extends CI_Model
 			->where('username', $user);
 			$query = $this->db->get();
         $user1 = $query->row_array();
-        print_r($user1);
+        //print_r($user1);
         if($user1 != ''){
             return false;
 
@@ -166,7 +166,7 @@ class Users_model extends CI_Model
 		$query = $this->db->get();
 
 		$result = $query->row_array();
-		//print_r($result['level']);
+		
 
 		$this->db->where('level =',$result['level']);
          
@@ -487,7 +487,7 @@ class Users_model extends CI_Model
 
 
 		$query = $this->db->get();
-print_r($query->result_array());
+
 		return $query->result_array();
 	}
 

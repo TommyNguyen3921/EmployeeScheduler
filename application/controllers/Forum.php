@@ -10,6 +10,9 @@ class Forum extends CI_Controller {
     parent::__construct();
     $this->load->helper('url');
     $this->load->model('users_model');
+
+    $this->form_validation->set_rules('topic', 'Topic', 'required');
+    $this->form_validation->set_rules('discussion', 'Discussion', 'required');
   }
 
   public function index()
@@ -20,8 +23,8 @@ class Forum extends CI_Controller {
 
       $data2['posts'] = $this->users_model->loadposts();
 
-            
-			print_r($data2);
+     
+			//print_r($data2);
     $this->template->show('forum',$data2);
   }
 
@@ -32,15 +35,26 @@ class Forum extends CI_Controller {
 			$data2['test'] = $this->session->userdata('access');
 
           
-
+      
             
-			print_r($data2['test'][0]["memberID"]);
+			//print_r($data2['test'][0]["memberID"]);
     $this->template->show('addpost',$data2);
   }
 
   public function submitpost()
   {
+    if ($this->form_validation->run() == FALSE){
+        
+      $this->load->library('session');
+			$data2['test'] = $this->session->userdata('access');
 
+          
+      
+            
+			//print_r($data2['test'][0]["memberID"]);
+    $this->template->show('addpost',$data2);
+     
+    }else{
     $this->load->library('session');
 			$data2['test'] = $this->session->userdata('access');
 
@@ -50,12 +64,13 @@ class Forum extends CI_Controller {
            
             
      $memberdata = $this->session->userdata('memberIDE');
-     print_r($memberdata);
+     //print_r($memberdata);
     		$this->users_model->doNewPost($topic, $discussion,$memberdata);
             
 			
     //$this->template->show('addpost',$data2);
     $this->index();
+    }
   }
   public function foruminfo($topicID)
   {
@@ -71,7 +86,7 @@ class Forum extends CI_Controller {
      $this->session->set_userdata('forum',$topicID);
 
      $test = $this->session->userdata('forum');
-     print_r($data2);
+     //print_r($data2);
     $this->template->show('foruminfo',$data2);
   }
 
@@ -98,7 +113,7 @@ class Forum extends CI_Controller {
 
       
       $data2['posts'] = $this->users_model->dosearch($search);
-     print_r($data2['posts']);
+     //print_r($data2['posts']);
     
     $this->template->show('forum',$data2);
   }

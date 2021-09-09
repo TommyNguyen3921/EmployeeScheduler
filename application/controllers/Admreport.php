@@ -21,7 +21,7 @@ class Admreport extends CI_Controller {
             $data2['reports'] = $this->users_model->loadreport();
 
             
-			print_r($data2);
+			//print_r($data2);
     $this->template->show('admreport',$data2);
   }
 

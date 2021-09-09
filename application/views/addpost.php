@@ -1,5 +1,5 @@
 <h2>Forum</h2>
-
+<h3 class="error"><?php echo validation_errors(); ?></h3>
 
 <h1>New Post</h1>
 
