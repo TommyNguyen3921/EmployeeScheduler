@@ -194,7 +194,7 @@
 // jQuery to get the content of row 4, column 1
 var val1 = $(t[0].rows[1].cells[0]).text();  
 
-alert(val1);
+//alert(val1);
 
 while (i != 10) {
   text += "The number is " + i;

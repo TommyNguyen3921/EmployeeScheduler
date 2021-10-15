@@ -120,7 +120,7 @@
 
     <tr>
 
-      <th colspan="4">My shift</th>
+      <th colspan="4">Available shift</th>
 
 
 

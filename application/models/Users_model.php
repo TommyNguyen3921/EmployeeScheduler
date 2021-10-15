@@ -70,7 +70,80 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
+//chat
 
+
+
+
+public function loadchatuser($memberID)
+{
+
+	$this->db->select('name')
+	->select('memberID')
+	->from('member')
+	->where('memberID !=', $memberID);
+	
+	$query = $this->db->get();
+	
+	return $query->result_array();
+}
+
+public function getmessagehistory($memberID,$senduser)
+{
+
+	$usersend = $senduser["senduser"];
+	$this->db->select('a.name as user')
+			->select('b.name as sent ')
+			->select('messagedata')
+			->select('timesent')
+			
+			->from('chatboxmessages c')
+			->join('member a', 'c.from_memberID = a.memberID')
+			->join('member b', 'c.to_memberID  = b.memberID')
+			->where("from_memberID='$memberID' AND to_memberID='$usersend' OR from_memberID='$usersend' AND to_memberID='$memberID' ")
+			->order_by('timesent', 'ASC');
+
+			//->where('from_memberID ', $memberID)
+			//->where('to_memberID ', $senduser["senduser"])
+			
+              //->or_where('from_memberID >', $senduser["senduser"])
+			  //->where('to_memberID ', $memberID);
+            
+			
+	
+	$query = $this->db->get();
+	
+	return $query->result_array();
+}
+public function domessagesend($memberID,$senduser)
+{
+	$data = array(
+        'from_memberID' => $memberID,
+        'to_memberID' => $senduser["senduser"],
+        'messagedata' => $senduser["message"]
+);
+
+$this->db->insert('chatboxmessages', $data);
+	
+$usersend = $senduser["senduser"];
+$this->db->select('a.name as user')
+		->select('b.name as sent ')
+		->select('messagedata')
+		->select('timesent')
+		
+		->from('chatboxmessages c')
+		->join('member a', 'c.from_memberID = a.memberID')
+		->join('member b', 'c.to_memberID  = b.memberID')
+		->where("from_memberID='$memberID' AND to_memberID='$usersend' OR from_memberID='$usersend' AND to_memberID='$memberID' ")
+		->order_by('timesent', 'DESC')
+		->limit(1);
+			
+	
+	$query = $this->db->get();
+	
+	return $query->result_array();
+}
+//------
 	public function loadchat()
 	{
 

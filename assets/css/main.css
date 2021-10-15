@@ -34,6 +34,11 @@ li a:hover {
     background-color: #9F79EE;
 }
 
+.chatboxstyle {
+  background-color: lightskyblue;
+  text-decoration:none;
+}
+
 .footer
 {
   background-color:black;
@@ -217,6 +222,10 @@ th {
   text-align: center;
 }
 
+td {
+  text-align: center;
+}
+
 
 
 
@@ -254,5 +263,39 @@ th {
 	min-height: 10vh;
    overflow-x: hidden;
 }
+.chatbox1{
+	position: relative;
+	margin: 1%;
+	padding: 10px 10px;
+	border: 1px solid #ececec;
+  background: gray;
+	border-radius: 20px;
+	max-height: 50vh;
+	min-height: 10vh;
+   overflow-x: hidden;
+}
 
+/*test----------------------------------------for chat*/
+.flex-container {
+  display: flex;
+  background-color: DodgerBlue;
+  height:750px;
+}
+
+.flex-container > div {
+  background-color: #f1f1f1;
+  margin: 10px;
  
+  font-size: 30px;
+  width:80%
+}
+
+#chatflex{
+  width:20%
+
+}
+
+a:active {
+  color: yellow;
+}
+
