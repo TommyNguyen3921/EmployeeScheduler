@@ -25,6 +25,7 @@
  <li><a href="<?= base_url(); ?>index.php?/Chat">Chat2</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Forum">Forum2</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Setup">Set up Schedule2</a></li>
+ <li><a href="<?= base_url(); ?>index.php?/Setupschedule">Set up Schedulereal</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Analysis">Analysis2</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Createacc">Create Account2</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Admreport">&#x21</a></li>

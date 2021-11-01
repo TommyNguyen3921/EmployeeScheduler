@@ -299,3 +299,76 @@ a:active {
   color: yellow;
 }
 
+.newweekbtn{
+  width: 70%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.newweekbtnborder{
+  border-radius: 25px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: solid;
+  background-color: gray;
+  padding: 1%;
+  height:200%;
+  width:50%
+}
+
+.datepicker{
+  display: inline-block;
+}
+
+#oldweek{
+  border-style: none;
+}
+
+.red{
+  color:red;
+}
+
+#formshift {
+  background-color: lightskyblue;
+}
+
+table.tableemployeefilled {
+  width: 100%;
+}
+
+table#shiftvalue {
+  width: 100%;
+}
+
+.tablefilter {
+  width: 100%;
+}
+
+table.tablefilter td:hover{
+  background-color: blue;
+  cursor: pointer;
+}
+.selected {
+    background-color: blue;
+    color: #FFF;
+}
+
+#shiftaddbutton{
+  float: right;
+}
+
+/* css for highlight on dayinfo*/
+.fullshift {
+  background-color: green;
+  color: #FFF;
+}
+.notfullshift {
+  background-color: red;
+  color: #FFF;
+}
+
+.titlecenter {
+  text-align: center;
+}

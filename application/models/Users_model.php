@@ -70,80 +70,80 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
-//chat
+	//chat
 
 
 
 
-public function loadchatuser($memberID)
-{
+	public function loadchatuser($memberID)
+	{
 
-	$this->db->select('name')
-	->select('memberID')
-	->from('member')
-	->where('memberID !=', $memberID);
-	
-	$query = $this->db->get();
-	
-	return $query->result_array();
-}
+		$this->db->select('name')
+			->select('memberID')
+			->from('member')
+			->where('memberID !=', $memberID);
 
-public function getmessagehistory($memberID,$senduser)
-{
+		$query = $this->db->get();
 
-	$usersend = $senduser["senduser"];
-	$this->db->select('a.name as user')
+		return $query->result_array();
+	}
+
+	public function getmessagehistory($memberID, $senduser)
+	{
+
+		$usersend = $senduser["senduser"];
+		$this->db->select('a.name as user')
 			->select('b.name as sent ')
 			->select('messagedata')
 			->select('timesent')
-			
+
 			->from('chatboxmessages c')
 			->join('member a', 'c.from_memberID = a.memberID')
 			->join('member b', 'c.to_memberID  = b.memberID')
 			->where("from_memberID='$memberID' AND to_memberID='$usersend' OR from_memberID='$usersend' AND to_memberID='$memberID' ")
 			->order_by('timesent', 'ASC');
 
-			//->where('from_memberID ', $memberID)
-			//->where('to_memberID ', $senduser["senduser"])
-			
-              //->or_where('from_memberID >', $senduser["senduser"])
-			  //->where('to_memberID ', $memberID);
-            
-			
-	
-	$query = $this->db->get();
-	
-	return $query->result_array();
-}
-public function domessagesend($memberID,$senduser)
-{
-	$data = array(
-        'from_memberID' => $memberID,
-        'to_memberID' => $senduser["senduser"],
-        'messagedata' => $senduser["message"]
-);
+		//->where('from_memberID ', $memberID)
+		//->where('to_memberID ', $senduser["senduser"])
 
-$this->db->insert('chatboxmessages', $data);
-	
-$usersend = $senduser["senduser"];
-$this->db->select('a.name as user')
-		->select('b.name as sent ')
-		->select('messagedata')
-		->select('timesent')
-		
-		->from('chatboxmessages c')
-		->join('member a', 'c.from_memberID = a.memberID')
-		->join('member b', 'c.to_memberID  = b.memberID')
-		->where("from_memberID='$memberID' AND to_memberID='$usersend' OR from_memberID='$usersend' AND to_memberID='$memberID' ")
-		->order_by('timesent', 'DESC')
-		->limit(1);
-			
-	
-	$query = $this->db->get();
-	
-	return $query->result_array();
-}
-//------
+		//->or_where('from_memberID >', $senduser["senduser"])
+		//->where('to_memberID ', $memberID);
+
+
+
+		$query = $this->db->get();
+
+		return $query->result_array();
+	}
+	public function domessagesend($memberID, $senduser)
+	{
+		$data = array(
+			'from_memberID' => $memberID,
+			'to_memberID' => $senduser["senduser"],
+			'messagedata' => $senduser["message"]
+		);
+
+		$this->db->insert('chatboxmessages', $data);
+
+		$usersend = $senduser["senduser"];
+		$this->db->select('a.name as user')
+			->select('b.name as sent ')
+			->select('messagedata')
+			->select('timesent')
+
+			->from('chatboxmessages c')
+			->join('member a', 'c.from_memberID = a.memberID')
+			->join('member b', 'c.to_memberID  = b.memberID')
+			->where("from_memberID='$memberID' AND to_memberID='$usersend' OR from_memberID='$usersend' AND to_memberID='$memberID' ")
+			->order_by('timesent', 'DESC')
+			->limit(1);
+
+
+		$query = $this->db->get();
+
+		return $query->result_array();
+	}
+	//------
 	public function loadchat()
 	{
 
@@ -185,18 +185,17 @@ $this->db->select('a.name as user')
 	public function checkduplicate($user)
 	{
 
-		 $this->db->select('username')
+		$this->db->select('username')
 			->from('login')
 			->where('username', $user);
-			$query = $this->db->get();
-        $user1 = $query->row_array();
-        //print_r($user1);
-        if($user1 != ''){
-            return false;
-
-        }else{
-             return true;
-        }
+		$query = $this->db->get();
+		$user1 = $query->row_array();
+		//print_r($user1);
+		if ($user1 != '') {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	public function addaccount($name, $user, $password, $level)
@@ -204,28 +203,28 @@ $this->db->select('a.name as user')
 
 		$query = $this->db->query("INSERT INTO login (username,password) VALUES ('$user', '$password');");
 		$query = $this->db->query("INSERT INTO member (name,level) VALUES ('$name', '$level');");
-		if($level == 0){
-            
-
-        
-		$this->db->select('memberID')
-			->from('member')
-			->where('name', $name);;
+		if ($level == 0) {
 
 
-		$query = $this->db->get();
-		$memberID = $query->result_array();
 
-		$member = $memberID[0]["memberID"];
+			$this->db->select('memberID')
+				->from('member')
+				->where('name', $name);;
 
-		$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Sunday', '0', '0');");
-		$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Monday', '0', '0');");
-		$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Tuesday', '0', '0');");
-		$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Wednesday 	', '0', '0');");
-		$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Thursday', '0', '0');");
-		$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Friday', '0', '0');");
-		$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Saturday', '0', '0');");
-	}
+
+			$query = $this->db->get();
+			$memberID = $query->result_array();
+
+			$member = $memberID[0]["memberID"];
+
+			$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Sunday', '0', '0');");
+			$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Monday', '0', '0');");
+			$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Tuesday', '0', '0');");
+			$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Wednesday 	', '0', '0');");
+			$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Thursday', '0', '0');");
+			$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Friday', '0', '0');");
+			$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Saturday', '0', '0');");
+		}
 	}
 
 
@@ -233,38 +232,36 @@ $this->db->select('a.name as user')
 	{
 
 		$this->db->select('level')
-		->from('member')
-		->where('memberID', $memberID);
+			->from('member')
+			->where('memberID', $memberID);
 
 		$query = $this->db->get();
 
 		$result = $query->row_array();
-		
 
-		$this->db->where('level =',$result['level']);
-         
+
+		$this->db->where('level =', $result['level']);
+
 		$query2 = $this->db->get('member');
-         
+
 		$result2 = $query2->num_rows();
 
-		
 
-		if(($result['level'] == 1 or $result['level'] == 2) and $result2 == 1){
-            
+
+		if (($result['level'] == 1 or $result['level'] == 2) and $result2 == 1) {
+
 			return true;
-        }else{
+		} else {
 			$sql = "DELETE pendingshift FROM pendingshift JOIN scheduler 
 			ON scheduler.scheduleID=pendingshift.scheduleID WHERE scheduler.memberID = ? ";
-             $this->db->query($sql, array($memberID));
-			
-			 $this->db->query("DELETE FROM forummessage where memberID = '$memberID';");
-			 $this->db->query("DELETE FROM bugreport where memberID = '$memberID';");
-             $this->db->query("DELETE FROM member where memberID = '$memberID';");
-		$this->db->query("DELETE FROM login where loginID = '$memberID';");
-		$this->db->query("DELETE FROM scheduler where memberID = '$memberID';");
-        }
+			$this->db->query($sql, array($memberID));
 
-		
+			$this->db->query("DELETE FROM forummessage where memberID = '$memberID';");
+			$this->db->query("DELETE FROM bugreport where memberID = '$memberID';");
+			$this->db->query("DELETE FROM member where memberID = '$memberID';");
+			$this->db->query("DELETE FROM login where loginID = '$memberID';");
+			$this->db->query("DELETE FROM scheduler where memberID = '$memberID';");
+		}
 	}
 
 	//---------------------------------------Forum Page page
@@ -541,9 +538,6 @@ $this->db->select('a.name as user')
 		$this->db->set('startdatetime', '0', FALSE);
 		$this->db->set('enddatetime', '0', FALSE);
 		$this->db->update('scheduler');
-
-		
-
 	}
 
 	//---------------------------------------schedule menu page	
@@ -576,21 +570,18 @@ $this->db->select('a.name as user')
 
 		$result = $query->row_array();
 
-		if (!empty($result)){
+		if (!empty($result)) {
 
 			return false;
-		}else{
+		} else {
 
 			$data = array(
 				'scheduleID' => $shiftID["shiftID"]
-		);
-		
-		$this->db->insert('pendingshift', $data);
-		return true;
+			);
+
+			$this->db->insert('pendingshift', $data);
+			return true;
 		}
-
-	
-
 	}
 
 	//---------------------------------------schedule admin/mananger menu page	
@@ -605,7 +596,7 @@ $this->db->select('a.name as user')
 			->from('scheduler')
 			->join('pendingshift', 'pendingshift.scheduleID = scheduler.scheduleID')
 			->join('member', 'member.memberID = scheduler.memberID');
-			
+
 
 		$query = $this->db->get();
 
@@ -619,8 +610,8 @@ $this->db->select('a.name as user')
 			->select('openshift.openshiftID')
 			->from('scheduler')
 			->join('openshift', 'openshift.scheduleID = scheduler.scheduleID');
-			
-			
+
+
 
 		$query = $this->db->get();
 
@@ -632,9 +623,6 @@ $this->db->select('a.name as user')
 
 		$this->db->where('pendingID', $pendID["pendID"]);
 		$this->db->delete('pendingshift');
-
-
-		
 	}
 
 	public function dopendaccept($pendID)
@@ -644,7 +632,7 @@ $this->db->select('a.name as user')
 		$this->db->select('scheduleID')
 			->from('pendingshift')
 			->where('pendingID', $pendID["pendID"]);
-			
+
 
 		$getvalue = $this->db->get();
 
@@ -652,17 +640,17 @@ $this->db->select('a.name as user')
 
 		$data1 = array(
 			'scheduleID' => $scheduleID[0]['scheduleID']
-			
+
 		);
 
 		$this->db->insert('openshift', $data1);
 
 
 		$this->db->select('*')
-		->from('scheduler')
-		->where('scheduleID', $scheduleID[0]['scheduleID']);
+			->from('scheduler')
+			->where('scheduleID', $scheduleID[0]['scheduleID']);
 
-		
+
 		$query1 = $this->db->get();
 
 		$schedulevalue = $query1->result_array();
@@ -674,7 +662,7 @@ $this->db->select('a.name as user')
 			'timeofday' => $schedulevalue[0]['timeofday'],
 			'startdatetime' => 0,
 			'enddatetime' => 0,
-			
+
 		);
 
 		$this->db->insert('scheduler', $data2);
@@ -685,11 +673,11 @@ $this->db->select('a.name as user')
 
 		$data = array(
 			'memberID' => 0
-			
-	);
-	
-	$this->db->where('scheduleID', $scheduleID[0]['scheduleID']);
-	$this->db->update('scheduler', $data);
+
+		);
+
+		$this->db->where('scheduleID', $scheduleID[0]['scheduleID']);
+		$this->db->update('scheduler', $data);
 
 
 		$this->db->select('scheduleID')
@@ -702,21 +690,21 @@ $this->db->select('a.name as user')
 		$result = $query2->result_array();
 
 
-		
+
 		$this->db->where('pendingID', $pendID["pendID"]);
-$this->db->delete('pendingshift');
+		$this->db->delete('pendingshift');
 
 
 		$this->db->select('scheduler.timeofday')
-		->select('scheduler.startdatetime')
-		->select('scheduler.enddatetime')
-		->select('openshift.openshiftID')
-		->select('scheduler.scheduleID')
-		->from('scheduler')
-		->join('openshift', 'openshift.scheduleID = scheduler.scheduleID')
-		->where('scheduler.scheduleID', $result[0]["scheduleID"]);
+			->select('scheduler.startdatetime')
+			->select('scheduler.enddatetime')
+			->select('openshift.openshiftID')
+			->select('scheduler.scheduleID')
+			->from('scheduler')
+			->join('openshift', 'openshift.scheduleID = scheduler.scheduleID')
+			->where('scheduler.scheduleID', $result[0]["scheduleID"]);
 
-		
+
 		$query3 = $this->db->get();
 
 		return $query3->result_array();
@@ -726,18 +714,14 @@ $this->db->delete('pendingshift');
 	{
 
 		$this->db->select('scheduler.memberID')
-		->from('scheduler')
-		->join('pendingshift', 'pendingshift.scheduleID = scheduler.scheduleID')
-		->where('pendingshift.scheduleID', $pendID["pendID"]);
+			->from('scheduler')
+			->join('pendingshift', 'pendingshift.scheduleID = scheduler.scheduleID')
+			->where('pendingshift.scheduleID', $pendID["pendID"]);
 
-		
+
 		$query = $this->db->get();
 
 		return $query->result_array();
-		
-
-		
-		
 	}
 
 	public function doopenshiftdelete($openshiftID)
@@ -745,12 +729,12 @@ $this->db->delete('pendingshift');
 
 
 		$this->db->select('scheduleID')
-		
-		->from('openshift')
-		
-		->where('openshiftID', $openshiftID["openshiftID"]);
 
-		
+			->from('openshift')
+
+			->where('openshiftID', $openshiftID["openshiftID"]);
+
+
 		$query = $this->db->get();
 
 		$result = $query->result_array();
@@ -760,100 +744,437 @@ $this->db->delete('pendingshift');
 
 		$this->db->where('openshiftID', $openshiftID["openshiftID"]);
 		$this->db->delete('openshift');
-
-		
-		
 	}
 
-	public function doopenshiftaccept($openshiftID,$memberdata)
+	public function doopenshiftaccept($openshiftID, $memberdata)
 	{
 		$this->db->select('scheduler.timeofday')
-		
-		->from('scheduler')
-		->join('openshift', 'openshift.scheduleID = scheduler.scheduleID')
-		->where('openshift.openshiftID', $openshiftID["openshiftID"]);
 
-		
+			->from('scheduler')
+			->join('openshift', 'openshift.scheduleID = scheduler.scheduleID')
+			->where('openshift.openshiftID', $openshiftID["openshiftID"]);
+
+
 		$check = $this->db->get();
 
 		$shiftcheck = $check->row_array();
 
 
 		$this->db->select('startdatetime')
-		->from('scheduler')
-		->where('memberID', $memberdata)
-		->where('timeofday', $shiftcheck["timeofday"]);
+			->from('scheduler')
+			->where('memberID', $memberdata)
+			->where('timeofday', $shiftcheck["timeofday"]);
 
-		
+
 		$check1 = $this->db->get();
 
 		$shiftcheck2 = $check1->row_array();
 
-		
-		
 
-		if($shiftcheck2["startdatetime"] != 0){
+
+
+		if ($shiftcheck2["startdatetime"] != 0) {
 			return false;
-		}else{
+		} else {
 
 
-		$this->db->select('scheduler.enddatetime')
-		->select('scheduler.startdatetime')
-		->select('scheduler.timeofday')
-		->select('scheduler.scheduleID')
-		->from('scheduler')
-		->join('openshift', 'openshift.scheduleID = scheduler.scheduleID')
-		->where('openshift.openshiftID', $openshiftID["openshiftID"]);
+			$this->db->select('scheduler.enddatetime')
+				->select('scheduler.startdatetime')
+				->select('scheduler.timeofday')
+				->select('scheduler.scheduleID')
+				->from('scheduler')
+				->join('openshift', 'openshift.scheduleID = scheduler.scheduleID')
+				->where('openshift.openshiftID', $openshiftID["openshiftID"]);
 
-		
-		$query = $this->db->get();
 
-		$shiftvalue = $query->result_array();
+			$query = $this->db->get();
 
-		$this->db->select('scheduleID')
-		->from('scheduler')
-		->where('memberID', $memberdata)
-		->where('timeofday', $shiftvalue[0]["timeofday"]);
+			$shiftvalue = $query->result_array();
 
-		
-		$query1 = $this->db->get();
+			$this->db->select('scheduleID')
+				->from('scheduler')
+				->where('memberID', $memberdata)
+				->where('timeofday', $shiftvalue[0]["timeofday"]);
 
-		$updateidvalue = $query1->result_array();
 
-		$data1 = array(
+			$query1 = $this->db->get();
 
-			'startdatetime' => $shiftvalue[0]["startdatetime"],
-			'enddatetime' => $shiftvalue[0]["enddatetime"]
+			$updateidvalue = $query1->result_array();
+
+			$data1 = array(
+
+				'startdatetime' => $shiftvalue[0]["startdatetime"],
+				'enddatetime' => $shiftvalue[0]["enddatetime"]
+			);
+
+
+
+			$this->db->where('timeofday', $shiftvalue[0]["timeofday"]);
+			$this->db->where('memberID', $memberdata);
+			$this->db->update('scheduler', $data1);
+
+
+			$this->db->where('openshiftID', $openshiftID["openshiftID"]);
+			$this->db->delete('openshift');
+
+			$this->db->where('scheduleID', $shiftvalue[0]["scheduleID"]);
+			$this->db->delete('scheduler');
+
+
+			$this->db->select('scheduler.timeofday')
+				->select('scheduler.startdatetime')
+				->select('scheduler.enddatetime')
+				->select('scheduler.scheduleID')
+				->select('member.name')
+				->from('scheduler')
+				->join('member', 'member.memberID = scheduler.memberID')
+				->where('scheduler.scheduleID', $updateidvalue[0]["scheduleID"]);
+
+
+			$query2 = $this->db->get();
+
+			return $query2->result_array();
+		}
+	}
+
+	//admscheduler setup
+	public function addweek($item)
+	{
+
+		$data = array(
+			'startdate' => $item['startdate'],
+			'enddate' => $item['enddate']
+
 		);
 
-
-		
-		$this->db->where('timeofday', $shiftvalue[0]["timeofday"]);
-		$this->db->where('memberID', $memberdata);
-		$this->db->update('scheduler', $data1);
+		$this->db->insert('newweek', $data);
 
 
-		$this->db->where('openshiftID', $openshiftID["openshiftID"]);
-		$this->db->delete('openshift');
+		$this->db->select('weekID')
+			->from('newweek')
+			->order_by('weekID', 'DESC')
+			->limit(1);
 
-		$this->db->where('scheduleID', $shiftvalue[0]["scheduleID"]);
-		$this->db->delete('scheduler');
+		$query = $this->db->get();
+
+		$result = $query->result_array();
+		$weekid = $result[0]["weekID"];
 
 
-		$this->db->select('scheduler.timeofday')
-			->select('scheduler.startdatetime')
-			->select('scheduler.enddatetime')
-			->select('scheduler.scheduleID')
-			->select('member.name')
-			->from('scheduler')
-			->join('member', 'member.memberID = scheduler.memberID')
-		->where('scheduler.scheduleID', $updateidvalue[0]["scheduleID"]);
 
-		
+		foreach ($item["allitem"] as $row) {
+			$data2 = array(
+				'start' => $row['start'],
+				'startampm' => $row['startampm'],
+				'end' => $row['end'],
+				'endampm' => $row['endampm'],
+				'weekID' => $weekid,
+				'timeofday' => $row['date'],
+				'amtpeople' => $row['people'],
+			);
+
+			$this->db->insert('builtshift', $data2);
+		}
+	}
+
+	public function checkscheduleweek()
+	{
+
+		$this->db->select('weekID')
+			->from('newweek')
+			->order_by('weekID', 'DESC')
+			->limit(1);
+
+		$query = $this->db->get();
+
+		$result = $query->result_array();
+
+
+		if (empty($result)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public function douselastweek($start, $end)
+	{
+		//get last week weekID
+		$this->db->select('weekID')
+			->from('newweek')
+			->order_by('weekID', 'DESC')
+			->limit(1);
+
+		$query = $this->db->get();
+
+		$result = $query->result_array();
+
+
+		//insert new week startdate and enddate
+		$data2 = array(
+			'startdate' => $start,
+			'enddate' => $end
+
+		);
+
+		$this->db->insert('newweek', $data2);
+
+		//select all shift from the previous week
+		$this->db->select('*')
+			->from('builtshift')
+			->where('weekID', $result[0]["weekID"]);
+
+		$query1 = $this->db->get();
+
+		$result1 = $query1->result_array();
+
+		//select all shift from the previous week
+		$this->db->select('*')
+			->from('schedulerinfo')
+			->where('weekID', $result[0]["weekID"]);
+
+		$query3 = $this->db->get();
+
+		$result3 = $query3->result_array();
+
+		//get new insert week weekID
+		$this->db->select('weekID')
+			->from('newweek')
+			->order_by('weekID', 'DESC')
+			->limit(1);
+
 		$query2 = $this->db->get();
 
-		return $query2->result_array();
+		$result2 = $query2->result_array();
+
+
+		foreach ($result1 as $row) {
+			$data2 = array(
+				'start' => $row['start'],
+				'startampm' => $row['startampm'],
+				'end' => $row['end'],
+				'endampm' => $row['endampm'],
+				'weekID' => $result2[0]["weekID"],
+				'timeofday' => $row['timeofday'],
+				'amtpeople' => $row['amtpeople'],
+
+			);
+
+			$this->db->insert('builtshift', $data2);
+		}
+
+
+		foreach ($result3 as $row) {
+			$data3 = array(
+				'memberID' => $row['memberID'],
+				'weekID' => $result2[0]["weekID"],
+				'timeofday' => $row['timeofday'],
+				'shifttime' => $row['shifttime'],
+				'modtime' => $row["modtime"],
+				'builtshiftID' => $row["builtshiftID"]
+
+			);
+
+			$this->db->insert('schedulerinfo', $data3);
+		}
 	}
-		
+
+	public function loadweeks()
+	{
+
+		$this->db->select('*')
+			->from('newweek');
+
+		$query = $this->db->get();
+
+		return $query->result_array();
+	}
+
+	public function weekinfo($weekID)
+	{
+
+		$this->db->select('*')
+			->from('newweek')
+			->join('builtshift', 'builtshift.weekID = newweek.weekID')
+			->where('newweek.weekID', $weekID);
+
+		$query = $this->db->get();
+		//print_r($query->result_array());
+		return $query->result_array();
+	}
+
+	public function tableinfo($weekID)
+	{
+		$sql = ('SELECT member.name,GROUP_CONCAT(IF(schedulerinfo.timeofday = "1", schedulerinfo.shifttime, NULL)) as days
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "1", schedulerinfo.modtime, NULL)) as mdays
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "2", schedulerinfo.shifttime, NULL)) as days1
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "2", schedulerinfo.modtime, NULL)) as mdays1
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "3", schedulerinfo.shifttime, NULL)) as days2
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "3", schedulerinfo.modtime, NULL)) as mdays2
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "4", schedulerinfo.shifttime, NULL)) as days3
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "4", schedulerinfo.modtime, NULL)) as mdays3
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "5", schedulerinfo.shifttime, NULL)) as days4
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "5", schedulerinfo.modtime, NULL)) as mdays4
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "6", schedulerinfo.shifttime, NULL)) as days5
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "6", schedulerinfo.modtime, NULL)) as mdays5
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "7", schedulerinfo.shifttime, NULL)) as days6
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "7", schedulerinfo.modtime, NULL)) as mdays6
+		FROM member LEFT JOIN schedulerinfo ON member.memberID=schedulerinfo.memberID AND schedulerinfo.weekID =? WHERE member.level=0  GROUP BY member.name;');
+		return $this->db->query($sql, $weekID)->result_array();
+	}
+	public function doaddshift($data)
+	{
+		$data1 = array(
+			'memberID' => $data['member'],
+			'timeofday' => $data['day'],
+			'shifttime' => $data['time'],
+			'weekID' => $data['weekID'],
+			'modtime' => $data['modtime'],
+			'builtshiftID' => $data['shiftID'],
+		);
+
+		$this->db->insert('schedulerinfo', $data1);
+
+		$sql = ('SELECT member.name,schedulerinfo.shifttime,member.memberID,schedulerinfo.modtime,schedulerinfo.scheduleinfoID
+		FROM member LEFT JOIN schedulerinfo ON member.memberID=schedulerinfo.memberID AND schedulerinfo.weekID =? AND schedulerinfo.timeofday=? WHERE member.level=0 AND schedulerinfo.shifttime IS NOT NULL AND member.memberID=? GROUP BY member.name;');
+		return $this->db->query($sql, array($data['weekID'], $data['day'], $data['member']))->result_array();
+
+
+		$query = $this->db->get();
+
+		return $query->result_array();
+	}
+	public function dofiltername($memberID)
+	{
+		$sql = ('SELECT member.name,GROUP_CONCAT(IF(schedulerinfo.timeofday = "1", schedulerinfo.shifttime, NULL)) as days
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "1", schedulerinfo.modtime, NULL)) as mdays
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "2", schedulerinfo.shifttime, NULL)) as days1
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "2", schedulerinfo.modtime, NULL)) as mdays1
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "3", schedulerinfo.shifttime, NULL)) as days2
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "3", schedulerinfo.modtime, NULL)) as mdays2
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "4", schedulerinfo.shifttime, NULL)) as days3
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "4", schedulerinfo.modtime, NULL)) as mdays3
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "5", schedulerinfo.shifttime, NULL)) as days4
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "5", schedulerinfo.modtime, NULL)) as mdays4
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "6", schedulerinfo.shifttime, NULL)) as days5
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "6", schedulerinfo.modtime, NULL)) as mdays5
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "7", schedulerinfo.shifttime, NULL)) as days6
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "7", schedulerinfo.modtime, NULL)) as mdays6
+		FROM member LEFT JOIN schedulerinfo ON member.memberID=schedulerinfo.memberID AND schedulerinfo.weekID =? WHERE member.memberID=?  GROUP BY member.name;');
+		return $this->db->query($sql, array($memberID["weekID"], $memberID["memberID"]))->result_array();
+	}
+
+	public function dofilterdate($filtervalue)
+	{
+
+
+		$sql = ('SELECT member.name,GROUP_CONCAT(IF(schedulerinfo.timeofday = "1", schedulerinfo.shifttime, NULL)) as days
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "1", schedulerinfo.modtime, NULL)) as mdays
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "2", schedulerinfo.shifttime, NULL)) as days1
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "2", schedulerinfo.modtime, NULL)) as mdays1
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "3", schedulerinfo.shifttime, NULL)) as days2
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "3", schedulerinfo.modtime, NULL)) as mdays2
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "4", schedulerinfo.shifttime, NULL)) as days3
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "4", schedulerinfo.modtime, NULL)) as mdays3
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "5", schedulerinfo.shifttime, NULL)) as days4
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "5", schedulerinfo.modtime, NULL)) as mdays4
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "6", schedulerinfo.shifttime, NULL)) as days5
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "6", schedulerinfo.modtime, NULL)) as mdays5
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "7", schedulerinfo.shifttime, NULL)) as days6
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "7", schedulerinfo.modtime, NULL)) as mdays6
+		FROM member LEFT JOIN schedulerinfo ON member.memberID=schedulerinfo.memberID AND schedulerinfo.weekID =? WHERE member.memberID=?  GROUP BY member.name;');
+		return $this->db->query($sql, array($filtervalue["weekID"], $filtervalue["date"]))->result_array();
+	}
+
+	//dayweekinfo
+	public function loaddayinfo($weekID, $day)
+	{
+
+
+		$this->db->select('schedulerinfo.timeofday')
+			->select('schedulerinfo.shifttime')
+			->select('member.name')
+			->from('member')
+			->join('schedulerinfo', 'schedulerinfo.memberID = member.memberID')
+
+			->where('schedulerinfo.weekID', $weekID)
+			->where('schedulerinfo.timeofday', $day);
+
+
+		$query = $this->db->get();
+
+		return $query->result_array();
+	}
+
+	public function loademployeeinfo($weekID, $day)
+	{
+
+		$sql = ('SELECT member.name,schedulerinfo.shifttime,member.memberID
+		FROM member LEFT JOIN schedulerinfo ON member.memberID=schedulerinfo.memberID AND schedulerinfo.weekID =? AND schedulerinfo.timeofday=? WHERE member.level=0 AND schedulerinfo.shifttime IS NULL GROUP BY member.name;');
+		return $this->db->query($sql, array($weekID, $day))->result_array();
+	}
+
+	public function weekinfoshift($weekID, $day)
+	{
+
+		$this->db->select('*')
+			->from('builtshift')
+			->join('newweek', 'newweek.weekID = builtshift.weekID')
+			->where('builtshift.weekID', $weekID)
+			->where('builtshift.timeofday', $day);
+
+		$query = $this->db->get();
+
+		return $query->result_array();
+	}
+
+	public function loadscheduleemployee($weekID, $day)
+	{
+
+		$sql = ('SELECT member.name,schedulerinfo.shifttime,member.memberID,schedulerinfo.modtime,schedulerinfo.scheduleinfoID
+		FROM member LEFT JOIN schedulerinfo ON member.memberID=schedulerinfo.memberID AND schedulerinfo.weekID =? AND schedulerinfo.timeofday=? WHERE member.level=0 AND schedulerinfo.shifttime IS NOT NULL GROUP BY member.name ORDER BY schedulerinfo.scheduleinfoID ASC;');
+		return $this->db->query($sql, array($weekID, $day))->result_array();
+	}
+
+	public function weekdate($weekID)
+	{
+
+		$this->db->select('*')
+			->from('newweek')
+			->where('weekID', $weekID);
+
+		$query = $this->db->get();
+		//print_r($query->result_array());
+		return $query->result_array();
+	}
+
+	public function dodeleteshift($shiftID)
+	{
+
+
+		$this->db->where('scheduleinfoID', $shiftID);
+		$this->db->delete('schedulerinfo');
+	}
+
+
+
+	
+
+	public function doshiftslot($weekID, $day)
+	{
+
+		$sql = ('SELECT *,count(schedulerinfo.shifttime) as count
+		FROM builtshift LEFT JOIN schedulerinfo ON builtshift.builtshiftID=schedulerinfo.builtshiftID WHERE builtshift.weekID =? AND builtshift.timeofday=? GROUP BY builtshift.builtshiftID ;');
+		return $this->db->query($sql, array($weekID, $day))->result_array();
+	}
+
+	public function doshiftstable($weekID, $day)
+	{
+
+		$sql = ('SELECT *,GROUP_CONCAT(member.name) as name,GROUP_CONCAT(schedulerinfo.scheduleinfoID) as gscheduleinfoID,GROUP_CONCAT(schedulerinfo.modtime) as gmodtime
+		FROM builtshift 
+		LEFT JOIN schedulerinfo ON builtshift.builtshiftID=schedulerinfo.builtshiftID 
+		LEFT JOIN member ON member.memberID=schedulerinfo.memberID WHERE builtshift.weekID =? AND builtshift.timeofday=? GROUP BY builtshift.builtshiftID;');
+		return $this->db->query($sql, array($weekID, $day))->result_array();
 	}
 }
