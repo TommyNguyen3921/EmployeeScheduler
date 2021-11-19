@@ -361,14 +361,19 @@ table.tablefilter td:hover{
 
 /* css for highlight on dayinfo*/
 .fullshift {
-  background-color: green;
-  color: #FFF;
+  background-color: #90EE90;
+  color: black;
 }
 .notfullshift {
-  background-color: red;
-  color: #FFF;
+  background-color: #FFCCCB;
+  color: black;
 }
 
 .titlecenter {
   text-align: center;
+}
+
+.titlespacing {
+  display:inline;
+  margin-left: 75%;
 }

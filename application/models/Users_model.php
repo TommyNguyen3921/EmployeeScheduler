@@ -1177,4 +1177,230 @@ class Users_model extends CI_Model
 		LEFT JOIN member ON member.memberID=schedulerinfo.memberID WHERE builtshift.weekID =? AND builtshift.timeofday=? GROUP BY builtshift.builtshiftID;');
 		return $this->db->query($sql, array($weekID, $day))->result_array();
 	}
+	//employee shift
+	public function doloadmeployeeshift($memberdata,$weekID)
+	{
+		
+
+		$this->db->select('*')
+			->from('schedulerinfo')
+			->where('memberID', $memberdata)
+			->where('weekID ', $weekID);
+
+
+		$query = $this->db->get();
+
+		return $query->result_array();
+	}
+
+	public function tableinfoemp($weekID,$memberID)
+	{
+		$sql = ('SELECT member.name,GROUP_CONCAT(IF(schedulerinfo.timeofday = "1", schedulerinfo.shifttime, NULL)) as days
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "1", schedulerinfo.modtime, NULL)) as mdays
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "2", schedulerinfo.shifttime, NULL)) as days1
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "2", schedulerinfo.modtime, NULL)) as mdays1
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "3", schedulerinfo.shifttime, NULL)) as days2
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "3", schedulerinfo.modtime, NULL)) as mdays2
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "4", schedulerinfo.shifttime, NULL)) as days3
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "4", schedulerinfo.modtime, NULL)) as mdays3
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "5", schedulerinfo.shifttime, NULL)) as days4
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "5", schedulerinfo.modtime, NULL)) as mdays4
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "6", schedulerinfo.shifttime, NULL)) as days5
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "6", schedulerinfo.modtime, NULL)) as mdays5
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "7", schedulerinfo.shifttime, NULL)) as days6
+		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "7", schedulerinfo.modtime, NULL)) as mdays6
+		FROM member LEFT JOIN schedulerinfo ON member.memberID=schedulerinfo.memberID AND schedulerinfo.weekID =? WHERE member.level=0  GROUP BY member.name ORDER BY FIELD(schedulerinfo.memberID,?) DESC, schedulerinfo.memberID asc;');
+		return $this->db->query($sql, array($weekID, $memberID))->result_array();
+	}
+
+	public function dopendingUserShift($shiftID)
+	{
+
+		$this->db->select('scheduleinfoID')
+			->from('pendingusershifts')
+			->where('scheduleinfoID', $shiftID["shiftID"]);
+
+
+		$query = $this->db->get();
+
+		$result = $query->row_array();
+
+		if (!empty($result)) {
+
+			return false;
+		} else {
+
+			$data = array(
+				'scheduleinfoID' => $shiftID["shiftID"],
+				'weekID' => $shiftID["weekID"]
+			);
+
+			$this->db->insert('pendingusershifts', $data);
+			return true;
+		}
+	}
+
+	public function loadavailshiftemp($weekID)
+	{
+
+
+		$this->db->select('*')
+			
+			->from('builtshift')
+			->join('openusershifts', 'openusershifts.builtshiftID = builtshift.builtshiftID')
+			->where('builtshift.weekID ', $weekID);
+
+
+		$query = $this->db->get();
+
+		return $query->result_array();
+	}
+
+	public function doacceptopenshift($openshiftID,$memberdata,$weekID)
+	{
+
+
+		$this->db->select('*')
+			
+			->from('builtshift')
+			->join('openusershifts', 'openusershifts.builtshiftID = builtshift.builtshiftID')
+			->where('openusershifts.openshiftID ', $openshiftID);
+
+		
+		$query = $this->db->get();
+
+		$result = $query->result_array();
+		$time = $result[0]["start"].$result[0]["startampm"]."-".$result[0]["end"].$result[0]["endampm"];
+		
+		
+		$data = array(
+			'memberID' => $memberdata,
+			'weekID' => $weekID,
+			'timeofday' => $result[0]["timeofday"],
+			'shifttime' => $time,
+			'builtshiftID' => $result[0]["builtshiftID"],
+			
+		);
+
+		$this->db->insert('schedulerinfo', $data);
+
+		$this->db->where('openshiftID', $openshiftID);
+		$this->db->delete('openusershifts');
+
+	}
+
+
+		//adm pending shift shift
+	public function loadweekpend()
+	{
+
+		$sql = ('SELECT *,newweek.weekID,count(pendingusershifts.pendingID) as Shiftcount
+		FROM newweek 
+		LEFT JOIN schedulerinfo ON newweek.weekID=schedulerinfo.weekID 
+		LEFT JOIN pendingusershifts ON pendingusershifts.scheduleinfoID=schedulerinfo.scheduleinfoID GROUP BY schedulerinfo.weekID;');
+		return $this->db->query($sql)->result_array();
+	}
+
+	public function weekpendingshifts($weekID)
+	{
+		$sql = ('SELECT count(case schedulerinfo.timeofday when "1" then 1 else null end) as sun,count(case schedulerinfo.timeofday when "2" then 1 else null end) as mon,count(case schedulerinfo.timeofday when "3" then 1 else null end) as tue,count(case schedulerinfo.timeofday when "4" then 1 else null end) as wed,count(case schedulerinfo.timeofday when "5" then 1 else null end) as thu,count(case schedulerinfo.timeofday when "6" then 1 else null end) as fri,count(case schedulerinfo.timeofday when "7" then 1 else null end) as sat
+		FROM newweek 
+		JOIN schedulerinfo ON newweek.weekID=schedulerinfo.weekID 
+		JOIN pendingusershifts ON pendingusershifts.scheduleinfoID=schedulerinfo.scheduleinfoID WHERE schedulerinfo.weekID =? GROUP BY schedulerinfo.weekID;');
+		return $this->db->query($sql, array($weekID))->result_array();
+	}
+
+	function admpendingschedule($weekID,$day)
+	{
+		$this->db->select('*')
+			
+			->from('schedulerinfo')
+			->join('pendingusershifts', 'pendingusershifts.scheduleinfoID = schedulerinfo.scheduleinfoID')
+			->join('member', 'member.memberID = schedulerinfo.memberID')
+			->where('schedulerinfo.weekID ', $weekID)
+			->where('schedulerinfo.timeofday ', $day);
+
+
+		$query = $this->db->get();
+
+		return $query->result_array();
+	}
+
+	public function doshiftspend($weekID, $day)
+	{
+
+		$sql = ('SELECT *,GROUP_CONCAT(member.name) as name,GROUP_CONCAT(schedulerinfo.scheduleinfoID) as gscheduleinfoID,GROUP_CONCAT(schedulerinfo.modtime) as gmodtime
+		FROM builtshift 
+		LEFT JOIN schedulerinfo ON builtshift.builtshiftID=schedulerinfo.builtshiftID 
+		JOIN pendingusershifts ON schedulerinfo.scheduleinfoID=pendingusershifts.scheduleinfoID 
+		LEFT JOIN member ON member.memberID=schedulerinfo.memberID WHERE builtshift.weekID =? AND builtshift.timeofday=? GROUP BY builtshift.builtshiftID;');
+		return $this->db->query($sql, array($weekID, $day))->result_array();
+	}
+
+	public function dopenddeclineshift($pendID)
+	{
+
+
+		$this->db->where('pendingID', $pendID["pendID"]);
+		$this->db->delete('pendingusershifts');
+	}
+
+	public function dopendacceptshift($pendID)
+	{
+
+
+		$this->db->select('*')
+			
+			->from('schedulerinfo')
+			->join('pendingusershifts', 'pendingusershifts.scheduleinfoID = schedulerinfo.scheduleinfoID')
+			->where('pendingusershifts.pendingID ', $pendID);
+
+
+		$query = $this->db->get();
+
+		$result = $query->result_array();
+
+
+		print_r($result[0]["scheduleinfoID"]);
+
+		$data = array(
+			'builtshiftID' => $result[0]["builtshiftID"]
+			
+		);
+
+		$this->db->insert('openusershifts', $data);
+		
+		$this->db->where('pendingID', $result[0]["pendingID"]);
+		$this->db->delete('pendingusershifts');
+
+		$this->db->where('scheduleinfoID', $result[0]["scheduleinfoID"]);
+		$this->db->delete('schedulerinfo');
+	}
+
+	public function loadavailshift($weekID, $day)
+	{
+
+
+		$this->db->select('*')
+			
+			->from('builtshift')
+			->join('openusershifts', 'openusershifts.builtshiftID = builtshift.builtshiftID')
+			->where('builtshift.weekID ', $weekID)
+			->where('builtshift.timeofday ', $day);
+
+
+		$query = $this->db->get();
+
+		return $query->result_array();
+	}
+
+	public function dodeleteopenshift($openshiftID)
+	{
+
+
+		
+
+		$this->db->where('openshiftID', $openshiftID["openshiftID"]);
+		$this->db->delete('openusershifts');
+	}
 }

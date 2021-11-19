@@ -6,6 +6,7 @@
  
  <?php if ($test[0]['level'] == 0) { ?>
     <li><a href="<?= base_url(); ?>index.php?/Schedule">Scheduler</a></li>
+    <li><a href="<?= base_url(); ?>index.php?/Empshiftweek">SchedulerREAL</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Chat">Chat</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Forum">Forum</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Empanalysis">Analysis</a></li>
@@ -22,6 +23,7 @@
  <li><a href="<?= base_url(); ?>index.php?/User/Logout">Log Out1</a></li>
  <?php } else { ?>
     <li><a href="<?= base_url(); ?>index.php?/Scheduleadm">Scheduler</a></li>
+    <li><a href="<?= base_url(); ?>index.php?/Admpendshift">SchedulerREAL</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Chat">Chat2</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Forum">Forum2</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Setup">Set up Schedule2</a></li>
