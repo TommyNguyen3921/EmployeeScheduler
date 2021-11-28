@@ -2,7 +2,7 @@ body {
 	background: blanchedalmond;
 	
 }
-ul {
+#main{
     list-style-type: none;
     
     padding: 0;
@@ -26,9 +26,7 @@ li a {
     text-decoration: none;
 }
 
-li a:hover {
-    background-color: #0000FF;
-}
+
 
 .active {
     background-color: #9F79EE;

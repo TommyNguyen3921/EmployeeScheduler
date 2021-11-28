@@ -1024,6 +1024,7 @@ class Users_model extends CI_Model
 	}
 	public function doaddshift($data)
 	{
+		//add employee to scheduelrinfo
 		$data1 = array(
 			'memberID' => $data['member'],
 			'timeofday' => $data['day'],
@@ -1035,6 +1036,57 @@ class Users_model extends CI_Model
 
 		$this->db->insert('schedulerinfo', $data1);
 
+		//select statement to get hour for shift and insert stat for shift for employee
+		$this->db->select('*')
+			->from('builtshift')
+			->join('schedulerinfo', 'schedulerinfo.builtshiftID = builtshift.builtshiftID')
+			->order_by('schedulerinfo.scheduleinfoID', 'DESC')
+			->limit(1);
+
+
+		$query1 = $this->db->get();
+
+		$result = $query1->result_array();
+
+		$startime = 0;
+		$endtime = 0;
+
+		if($result[0]["startampm"] == "am" && $result[0]["start"] == 12){
+			$starttime = 0;
+		}else if ($result[0]["startampm"] == "am"){
+			$startime = $result[0]["start"];
+		}else if ($result[0]["startampm"] == "pm" && $result[0]["start"] == 12){
+			$startime = $result[0]["start"];
+		}else if($result[0]["startampm"] == "pm"){
+			$startime = $result[0]["start"] + 12;
+		}
+
+		if($result[0]["endampm"] == "am" && $result[0]["end"] == 12){
+			$endtime = 0;
+		}else if ($result[0]["endampm"] == "am"){
+			$endtime = $result[0]["end"];
+		}else if ($result[0]["endampm"] == "pm" && $result[0]["end"] == 12){
+			$endtime = $result[0]["end"];
+		}else if($result[0]["endampm"] == "pm"){
+			$endtime = $result[0]["end"] + 12;
+		}
+
+		$value1 = abs($startime - $endtime);
+		
+		$totalearn = 14.25 * $value1;
+		$value = $result[0]["scheduleinfoID"];
+		
+
+		$data1 = array(
+			'scheduleinfoID' => $value,
+			'pay' => $totalearn,
+			'hours' => $value1
+			
+		);
+
+		$this->db->insert('employeestat', $data1);
+
+		//get value to display shift of new added employee
 		$sql = ('SELECT member.name,schedulerinfo.shifttime,member.memberID,schedulerinfo.modtime,schedulerinfo.scheduleinfoID
 		FROM member LEFT JOIN schedulerinfo ON member.memberID=schedulerinfo.memberID AND schedulerinfo.weekID =? AND schedulerinfo.timeofday=? WHERE member.level=0 AND schedulerinfo.shifttime IS NOT NULL AND member.memberID=? GROUP BY member.name;');
 		return $this->db->query($sql, array($data['weekID'], $data['day'], $data['member']))->result_array();
@@ -1154,6 +1206,9 @@ class Users_model extends CI_Model
 
 		$this->db->where('scheduleinfoID', $shiftID);
 		$this->db->delete('schedulerinfo');
+
+		$this->db->where('scheduleinfoID', $shiftID);
+		$this->db->delete('employeestat');
 	}
 
 
@@ -1403,4 +1458,59 @@ class Users_model extends CI_Model
 		$this->db->where('openshiftID', $openshiftID["openshiftID"]);
 		$this->db->delete('openusershifts');
 	}
+
+	//adm accessing employeee stats
+
+	public function getEmployeeestat($memberID, $weekID)
+	{
+		$this->db->select('*')
+			
+			->from('schedulerinfo')
+			->join('employeestat', 'employeestat.scheduleinfoID = schedulerinfo.scheduleinfoID')
+			->where('schedulerinfo.weekID ', $weekID)
+			->where('schedulerinfo.memberID ', $memberID)
+			->order_by('timeofday', 'ASC');
+
+
+		$query = $this->db->get();
+
+		return $query->result_array();
+
+
+		
+
+	}
+
+	public function UpdateEmployeeestat($memberID, $weekID, $late, $pay, $Hours,$scheduleinfoID)
+	{
+
+
+		$data = array(
+			'latetoshift' => $late,
+			'pay' => $pay,
+			'hours' => $Hours
+	);
+	
+	$this->db->where('scheduleinfoID', $scheduleinfoID);
+	$this->db->update('employeestat', $data);
+
+		$this->db->select('*')
+			
+			->from('schedulerinfo')
+			->join('employeestat', 'employeestat.scheduleinfoID = schedulerinfo.scheduleinfoID')
+			->where('schedulerinfo.weekID ', $weekID)
+			->where('schedulerinfo.memberID ', $memberID)
+			->order_by('timeofday', 'ASC');
+
+
+		$query = $this->db->get();
+
+		return $query->result_array();
+
+
+		
+
+	}
+
+
 }

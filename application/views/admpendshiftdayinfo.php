@@ -191,7 +191,7 @@
         $(function() {
     $(document).on("click", '#delete', function() {
       var openshiftid = $(this).val();
-    alert(openshiftid);
+    
       $.ajax({
      url:'<?php echo base_url(); ?>index.php/Admpendshift/deleteopenshift',
      method: 'post',

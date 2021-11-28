@@ -1,7 +1,7 @@
 
 
 
-<ul>
+<ul id="main">
  
  
  <?php if ($test[0]['level'] == 0) { ?>
@@ -10,6 +10,7 @@
  <li><a href="<?= base_url(); ?>index.php?/Chat">Chat</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Forum">Forum</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Empanalysis">Analysis</a></li>
+ <li><a href="<?= base_url(); ?>index.php?/Empstat">Stat</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Empreport">&#x21</a></li>
  <li><a href="<?= base_url(); ?>index.php?/User/Logout">Log Out</a></li>
  <?php } else if($test[0]['level'] == 1) { ?>
@@ -29,6 +30,7 @@
  <li><a href="<?= base_url(); ?>index.php?/Setup">Set up Schedule2</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Setupschedule">Set up Schedulereal</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Analysis">Analysis2</a></li>
+ <li><a href="<?= base_url(); ?>index.php?/Admanalysis">Stat REAL</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Createacc">Create Account2</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Admreport">&#x21</a></li>
  <li><a href="<?= base_url(); ?>index.php?/User/Logout">Log Out2</a></li>
