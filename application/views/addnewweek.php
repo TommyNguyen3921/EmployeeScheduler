@@ -1,9 +1,10 @@
 <h2>Add New week</h2>
-<h1 class="datepicker">Week start Date: <?= $startdatepicker ?></h1>
-<h1 class="datepicker">Week End Date: <?= $Enddatepicker ?></h1>
+<h1 class=" weekdays"><b>Week start Date:</b>  <?= $startdatepicker ?> <b>Week End Date:</b>  <?= $Enddatepicker ?></h1>
+
 
 
 <div class="sticky-top">
+<div class="reportbox">
 <div class="dropdown">
   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     Scroll to week
@@ -21,7 +22,7 @@
 <form id="formshift">
 
 <div class="form-group">
-    <label for="formGroupExampleInput2">Day</label>
+    <label for="formGroupExampleInput2"><b>Day</b> </label>
     <select name="date" id="date">
 
 
@@ -37,7 +38,7 @@
   </div>
 
   <div class="form-group">
-    <label for="formGroupExampleInput2">People on Shift</label>
+    <label for="formGroupExampleInput2"><b>People on Shift</b> </label>
     <select name="date" id="people">
 
 
@@ -53,7 +54,7 @@
 
 
   <div class="form-group datepicker">
-    <label for="formGroupExampleInput2">Starting time</label>
+    <label for="formGroupExampleInput2"><b>Starting time</b> </label>
     <select name="start" id="start">
 
 
@@ -86,7 +87,7 @@
   </div>
 
   <div class="form-group datepicker">
-    <label for="formGroupExampleInput2">End time</label>
+    <label for="formGroupExampleInput2"><b>End time</b> </label>
     <select name="end" id="end">
 
 
@@ -123,6 +124,10 @@
   <button type="submit" class="btn btn-lg btn-primary btn-block" id="add" value="add"> Add</button>
 
 </form>
+<form id="newweek1" >
+<button class="btn btn-success"  type="submit" id="send"> Submit Week Shift</button>
+</form>
+</div>
 </div>
 <h1>Sunday</h1>
 <table class="table table-striped" id="Sunday">
@@ -261,9 +266,7 @@
 
 
 
-<form >
-<button type="submit" id="send"> Add</button>
-</form>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script type='text/javascript'>
@@ -308,6 +311,9 @@
 
     $("#send").click(function(event) {
       event.preventDefault();
+      if(allitem == ""){
+        $('#Modalsent').modal('show')
+      }else{
       $.ajax({
      url:'<?php echo base_url(); ?>index.php/Setupschedule/submitshift',
      method: 'post',
@@ -322,10 +328,26 @@
        }
    });
    
-     
+  }
     });
 
 
   
   });
 </script>
+
+<!-- Modal -->
+<div class="modal fade" id="Modalsent" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      
+      <div class="modal-body">
+        Week Schedule Shift Cannot be Empty
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+       
+      </div>
+    </div>
+  </div>
+</div>

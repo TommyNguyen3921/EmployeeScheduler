@@ -34,12 +34,12 @@
         </div>
         </div>
         <div class="col-md-2">
-            <div class="solid">
+          
                 <a href=" <?= base_url() ?>index.php?/Admreport/bugsolve/<?= $row['reportID']?>">
                 &#9745;
                 </a>
                 
-            </div>
+           
         </div>
     </div>
 </div>

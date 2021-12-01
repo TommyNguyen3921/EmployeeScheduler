@@ -5,9 +5,12 @@
 <?php if ($success) { ?>
   <h3 class="success">Report Sent</h3>
 <?php }?>
-<form method="POST" action="<?php echo base_url(); ?>index.php/Empreport/report" >
 
-<div class="form-group">
+<div class="reportbox">
+<h1>Send Report</h1>
+<form id="reportformbox" method="POST" action="<?php echo base_url(); ?>index.php/Empreport/report" >
+
+<div class="form-group ">
     <label for="exampleFormControlInput1">Send By</label>
     <input type="text" class="form-control" id="exampleFormControlInput1" name="user"value="<?= $test[0]['name'] ?>" readonly>
   </div>
@@ -24,7 +27,7 @@
   <button type="submit" class="btn btn-lg btn-primary btn-block"><span class="glyphicon glyphicon-log-in"></span> Submit</button>
 </form>
 
-
+</div>
 
 
   

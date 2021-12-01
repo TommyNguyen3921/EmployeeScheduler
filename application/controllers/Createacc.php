@@ -55,6 +55,7 @@ public function create(){
 
             $data2['accounts'] = $this->users_model->loadaccounts();
             $data2['success'] = false;
+            $data2['deletecheck'] = false;
             $data2['error'] = true;
 			//print_r($data2);
     $this->template->show('createacc',$data2);

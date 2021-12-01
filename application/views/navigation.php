@@ -5,11 +5,9 @@
  
  
  <?php if ($test[0]['level'] == 0) { ?>
-    <li><a href="<?= base_url(); ?>index.php?/Schedule">Scheduler</a></li>
-    <li><a href="<?= base_url(); ?>index.php?/Empshiftweek">SchedulerREAL</a></li>
+    <li><a href="<?= base_url(); ?>index.php?/Empshiftweek">Schedule</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Chat">Chat</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Forum">Forum</a></li>
- <li><a href="<?= base_url(); ?>index.php?/Empanalysis">Analysis</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Empstat">Stat</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Empreport">&#x21</a></li>
  <li><a href="<?= base_url(); ?>index.php?/User/Logout">Log Out</a></li>
@@ -23,17 +21,15 @@
  <li><a href="<?= base_url(); ?>index.php?/Empreport">&#x21</a></li>
  <li><a href="<?= base_url(); ?>index.php?/User/Logout">Log Out1</a></li>
  <?php } else { ?>
-    <li><a href="<?= base_url(); ?>index.php?/Scheduleadm">Scheduler</a></li>
-    <li><a href="<?= base_url(); ?>index.php?/Admpendshift">SchedulerREAL</a></li>
- <li><a href="<?= base_url(); ?>index.php?/Chat">Chat2</a></li>
- <li><a href="<?= base_url(); ?>index.php?/Forum">Forum2</a></li>
- <li><a href="<?= base_url(); ?>index.php?/Setup">Set up Schedule2</a></li>
- <li><a href="<?= base_url(); ?>index.php?/Setupschedule">Set up Schedulereal</a></li>
- <li><a href="<?= base_url(); ?>index.php?/Analysis">Analysis2</a></li>
- <li><a href="<?= base_url(); ?>index.php?/Admanalysis">Stat REAL</a></li>
- <li><a href="<?= base_url(); ?>index.php?/Createacc">Create Account2</a></li>
+ 
+    <li><a href="<?= base_url(); ?>index.php?/Admpendshift">Pending Shifts</a></li>
+ <li><a href="<?= base_url(); ?>index.php?/Chat">Chat</a></li>
+ <li><a href="<?= base_url(); ?>index.php?/Forum">Forum</a></li>
+ <li><a href="<?= base_url(); ?>index.php?/Setupschedule">Manage Scheduler</a></li>
+ <li><a href="<?= base_url(); ?>index.php?/Admanalysis">Manage Stat</a></li>
+ <li><a href="<?= base_url(); ?>index.php?/Createacc">Create Account</a></li>
  <li><a href="<?= base_url(); ?>index.php?/Admreport">&#x21</a></li>
- <li><a href="<?= base_url(); ?>index.php?/User/Logout">Log Out2</a></li>
+ <li><a href="<?= base_url(); ?>index.php?/User/Logout">Log Out</a></li>
  <?php } ?>
 </ul>
 

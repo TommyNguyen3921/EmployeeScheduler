@@ -1,5 +1,5 @@
 <h2>Forum</h2>
-
+<div class="reportbox">
 <form method="POST" action="<?php echo base_url(); ?>index.php/Forum/search">
 
   <div class="form-group">
@@ -9,7 +9,9 @@
   
   <button type="submit" class="btn btn-lg btn-primary btn-block"><span class="glyphicon glyphicon-log-in"></span>&#128269;</button>
 </form>
+</div>
 <h1>Feed</h1>
+<div class="reportbox">
 <div>
     <div class="row">
 
@@ -24,7 +26,7 @@
         <div class="col-md-2">
             
             <h1>
-                <a class="btn btn-success " style="display:block" href=" <?= base_url() ?>index.php?/Forum/addpost">
+                <a class="btn btn-success " id='addbutton' style="display:block" href=" <?= base_url() ?>index.php?/Forum/addpost">
                     ADD
                 </a>
                 </h1>
@@ -32,8 +34,10 @@
         </div>
     </div>
 </div>
+</div>
 
 <h1>Forum Topics</h1>
+<div class="reportbox">
 <?php foreach ($posts as $row) { ?>
 
     <div class="solid reportbox">
@@ -42,3 +46,4 @@
 </a>
 </div>
 <?php } ?>
+</div>

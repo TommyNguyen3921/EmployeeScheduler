@@ -2,10 +2,12 @@
 
 
 <div class="flex-container">
-  <div id="chatflex">
+
+  <div id="chatflex" class="overflow-auto">
+  <input class="sticky-top" id="myInput" type="text" placeholder="Search..">
   <?php foreach ($chatuser as $row) { ?>
 
-<div class="solid reportbox">
+<div class="solid reportbox " >
 <a class="chatboxstyle" style="display:block" href="#" data-value="<?= $row['memberID']?>"  >
 <?= $row['name']?>
 </a>
@@ -19,7 +21,7 @@
     
     <div class="chatbox1" id="chatbox1 ">
     <div  id="messages">
-
+    <h1>Select a User to Chat</h1>
   </div>
 
 </div>
@@ -43,29 +45,14 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script type='text/javascript'>
   $(document).ready(function() {
-/*
-    var element = document.getElementById("chatbox");
-element.scrollTop = element.scrollHeight;
 
-var input = document.getElementById("myInput");
-input.addEventListener("keyup", function(event) {
-  if (event.keyCode === 13) {
-   event.preventDefault();
-   document.getElementById("myBtn").click();
-  }
-});
-*/
 
 let val = '';
 
 $( ".chatboxstyle" ).click(function() {
   val = $(this).data('value');
   
-  //$("#chatbox").empty(); 
-  /*
-  $(".active").attr("class", "chatboxstyle ");
-  $(this).attr("class", "active");
-  */
+  
   $.ajax({
      url:'<?php echo base_url(); ?>index.php/Chat/messagehistory',
      method: 'post',
@@ -93,6 +80,14 @@ input.addEventListener("keyup", function(event) {
    document.getElementById("send").click();
   }
 });
+
+
+$("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $(".reportbox").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
 
 $("#send").click(function (event) {
     event.preventDefault();

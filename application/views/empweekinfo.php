@@ -1,6 +1,6 @@
-<h1>empweekinfo</h1>
+<h2>Employee Schedule</h2>
 
-<table class="table table-striped" id="employeeshift">
+<table class="table table-dark" id="employeeshift">
 
   <tr>
 
@@ -20,7 +20,7 @@
 
 
 
-    <tr>
+    <tr class="table-warning">
 
 
       <td><?= $tableinfo[0]['name'] ?></td>
@@ -77,8 +77,9 @@
 
 
 </table>
+
 <input id="myInput" type="text" placeholder="Search..">
-<table class="table table-striped" id="employeeshift">
+<table class="table table-dark" id="employeeshift">
 
   <tr>
 
@@ -101,7 +102,7 @@
   <?php $nm = 0; 
   foreach ($tableinfo as $row) { 
     if($nm == 1){?>
-    <tr>
+    <tr class="table-light">
 
 
       <td><?= $row['name'] ?></td>
@@ -158,9 +159,20 @@
 
 
 </table>
+<h1>Employee Shift Info</h1>
+<?php if ($fail) { ?>
+  <h3 class="error">Already schedule for that day.</h3>
+<?php }?>
+<?php if ($success) { ?>
+  <h3 class="success">Shifted Added</h3>
+<?php }?>
+<?php if ($full) { ?>
+  <h3 class="error">Shift already Filled</h3>
+<?php }?>
 
 <div style=" float:left; width:50%; background:white; border: 1px solid black; ">
-<table class="table table-striped">
+
+<table class="table table-primary">
 
 <tr>
 
@@ -183,7 +195,7 @@
 </tr>
 
 <?php foreach ($empshift as $row) { ?>
-  <tr>
+  <tr class="table-light">
 
 
   <?php if ($row['timeofday']==1){ ?>
@@ -205,7 +217,7 @@
     <td colspan="4"><?= $row['modtime'] ?></td>
 
 
-    <td><button type='submit' class='like' id='request' data-id=<?= $row['weekID'] ?> value=<?= $row['scheduleinfoID'] ?>>Request Shift Off</button></td>
+    <td><button type='submit'  class='like btn btn-secondary' id='request' data-id=<?= $row['weekID'] ?> value=<?= $row['scheduleinfoID'] ?>>Request Shift Off</button></td>
 
   </tr>
 <?php } ?>
@@ -218,7 +230,7 @@
 
 <div style=" float:left;  width:50%; background:white; border: 1px solid black; ">
 
-  <table class="table table-striped">
+  <table class="table table-primary">
 
     <tr>
 
@@ -232,7 +244,7 @@
 
 
     <?php foreach ($avail as $row) { ?>
-      <tr>
+      <tr class="table-light">
 
 
       <?php if ($row['timeofday']==1){ ?>
@@ -260,6 +272,7 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script type='text/javascript'>
     $(document).ready(function() {

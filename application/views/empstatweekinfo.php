@@ -1,13 +1,13 @@
-<h1><?= $weekID ?></h1>
+
 
 <h2>Employee Stat</h2>
 
-<h1><b>Week Start Date:</b> <?= $weekinfo[0]['startdate'] ?> <b>Week End Date:</b> <?= $weekinfo[0]['enddate'] ?></h1>
+<h1 class="weekdays"><b>Week Start Date:</b> <?= $weekinfo[0]['startdate'] ?> <b>Week End Date:</b> <?= $weekinfo[0]['enddate'] ?></h1>
 
 <h2>User Table</h2>
 
 
-      <table class="table table-striped">
+      <table class="table table-dark">
 
  <tr>
  
@@ -24,7 +24,7 @@
         $totalhours = 0;?>
  
  <?php foreach ($statinfo as $row) { ?>
- <tr>
+ <tr class="table-light">
  
  <?php if ($row['timeofday'] == 1) { ?>
     <td>Sunday</td>
@@ -57,7 +57,7 @@
 
 
 <?php } ?>
-<tr><td colspan='2'><b>Total Hours and Pay</b></td><td >$<?php echo $totalpay ?></td><td><?php echo $totalhours ?></td></tr>
+<tr class="table-light"><td colspan='2'><b>Total Hours and Pay</b></td><td >$<?php echo $totalpay ?></td><td><?php echo $totalhours ?></td></tr>
 
  
 

@@ -2,6 +2,19 @@ body {
 	background: blanchedalmond;
 	
 }
+h1{
+  color:black;
+  font-family: "Times New Roman";
+}
+h2{
+  color:#2832c2;
+  font-family: "Times New Roman";
+}
+
+#userlogin{
+  color:darkblue;
+  font-family: " 	Courier New";
+}
 #main{
     list-style-type: none;
     
@@ -55,20 +68,15 @@ table{
 }
 
 .success {
-  color: green;
-display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 30%;
+  color: white;
+  background-color: green;
+  border-radius: 5px;
+  padding: 10px;
 }
 
 .error {
-  color: red;
-display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 30%;
-  
+  color: black;
+  background-color: lightsalmon;
   border-radius: 5px;
   padding: 10px;
 }
@@ -137,8 +145,7 @@ textarea {
   margin: 10px;
   background: white;
   border-radius: 10px;
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
-			0 10px 10px rgba(0,0,0,0.22);
+ 
 }
 .forumBox{
 	position: relative;
@@ -167,10 +174,9 @@ textarea {
 .reportbox {
   margin: 10px;
   border-style: solid;
-  background-color: #fff;
+  background-color: lightgray;
 	border-radius: 10px;
-  	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
-			0 10px 10px rgba(0,0,0,0.22);
+  	
 	position: relative;
 	overflow: hidden;
 
@@ -184,12 +190,23 @@ a:hover {
   margin: 10px;
   border-style: solid;
   background-color: #fff;
-	border-radius: 10px;
-  	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
-			0 10px 10px rgba(0,0,0,0.22);
+	
+  
 	position: relative;
 	overflow: hidden;
 
+	
+}
+
+.reportboxinfodescription {
+  margin: 10px;
+  border-style: solid;
+  background-color: #fff;
+	
+  
+	position: relative;
+	overflow: hidden;
+  height:500px;
 	
 }
 
@@ -206,13 +223,40 @@ a:hover {
   margin-right: 300px;
 }
 #reportboxinfo { color: inherit; 
-  text-decoration:none;} 
-
+  text-decoration:none;
   
+} 
+
+#reportformbox {  
+  background-color:blanchedalmond;
+  border-radius: 5px;
+} 
+
+.solid{
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25);
+  background-color:white;
+}
+
+.solid:hover {
+  background-color: lightskyblue;
+}
+
 /*reportadmin*/
 
-form { margin: 70px;
-  border: 1px solid black;}
+form { margin: 30px;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color:blanchedalmond;
+}
+.floated {
+  float:left;
+  margin-right:5px;
+}
+#newweek { border-style: none; }
+
+
+#newweek1 { border-style: none;
+  background-color:lightgray; }
 
 #update { display: none; }
 
@@ -269,14 +313,14 @@ td {
   background: gray;
 	border-radius: 20px;
 	max-height: 50vh;
-	min-height: 10vh;
+	min-height: 50vh;
    overflow-x: hidden;
 }
 
 /*test----------------------------------------for chat*/
 .flex-container {
   display: flex;
-  background-color: DodgerBlue;
+  background-color: lightgray;
   height:750px;
 }
 
@@ -374,4 +418,17 @@ table.tablefilter td:hover{
 .titlespacing {
   display:inline;
   margin-left: 75%;
+}
+
+.weekdays{
+  background-color: white;
+}
+#myInput{
+  width: 100%;
+}
+
+#addbutton{
+  height: 60px;
+  margin-left: auto;
+    margin-right: auto;
 }

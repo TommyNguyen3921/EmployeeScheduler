@@ -1313,8 +1313,11 @@ class Users_model extends CI_Model
 
 	public function doacceptopenshift($openshiftID,$memberdata,$weekID)
 	{
+		
+		
 
-
+		
+		//get time to add to user shift
 		$this->db->select('*')
 			
 			->from('builtshift')
@@ -1328,7 +1331,37 @@ class Users_model extends CI_Model
 		$time = $result[0]["start"].$result[0]["startampm"]."-".$result[0]["end"].$result[0]["endampm"];
 		
 		
-		$data = array(
+		//check if shift is full
+		$sql = ('SELECT *,count(schedulerinfo.shifttime) as count
+		FROM builtshift LEFT JOIN schedulerinfo ON builtshift.builtshiftID=schedulerinfo.builtshiftID WHERE builtshift.weekID =? AND builtshift.timeofday=? AND builtshift.builtshiftID=? GROUP BY builtshift.builtshiftID ;');
+		$fullcheck = $this->db->query($sql, array($weekID, $result[0]["timeofday"],$result[0]["builtshiftID"]))->result_array();
+
+		$slotfull = $fullcheck[0]["amtpeople"] - $fullcheck[0]["count"];
+		//print_r($slotfull);
+		if($slotfull == 0 ){
+		$this->db->where('openshiftID', $openshiftID);
+		$this->db->delete('openusershifts');
+
+			return 1;
+		}
+		
+		//check if user is already schedule for that day
+		$this->db->select('*')
+			
+		->from('schedulerinfo')
+		->where('memberID', $memberdata)
+		->where('timeofday', $result[0]["timeofday"])
+		->where('weekID', $weekID);
+
+	
+		$query = $this->db->get();
+
+		$result1 = $query->result_array();
+
+		//add shift if not already schedule for that day
+		if(empty($result1)){
+
+				$data = array(
 			'memberID' => $memberdata,
 			'weekID' => $weekID,
 			'timeofday' => $result[0]["timeofday"],
@@ -1341,6 +1374,16 @@ class Users_model extends CI_Model
 
 		$this->db->where('openshiftID', $openshiftID);
 		$this->db->delete('openusershifts');
+
+			return 2;
+		}else{
+			//return 3 if already schedule for that day
+			return 3;
+		}
+		
+		
+		
+	
 
 	}
 

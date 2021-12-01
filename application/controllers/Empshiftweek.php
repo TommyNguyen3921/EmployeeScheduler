@@ -28,6 +28,11 @@ class Empshiftweek extends CI_Controller {
   {
 
     $this->load->library('session');
+
+    $data2['fail'] = false;
+    $data2['success'] = false;
+    $data2['full'] = false;
+
     $data2['test'] = $this->session->userdata('access');
 
     $data2['weekID'] = $weekID;
@@ -35,16 +40,14 @@ class Empshiftweek extends CI_Controller {
 
     $data2['avail'] =$this->users_model->loadavailshiftemp($weekID);
 
-    print_r($data2['avail']);
+    
     $data2['tableinfo'] = $this->users_model->tableinfoemp($weekID,$memberdata);
 
     
-//testing
-    
-    //$data2['schedule1'] =$this->users_model->doloadscheduleemployee($memberdata);
+
 
     $data2['open'] =$this->users_model->loadopenschedule();
-//testing
+
 $data2['empshift'] =$this->users_model->doloadmeployeeshift($memberdata,$weekID);
 
     $this->template->show('empweekinfo', $data2);
@@ -64,9 +67,27 @@ $data2['empshift'] =$this->users_model->doloadmeployeeshift($memberdata,$weekID)
 {
   $memberdata = $this->session->userdata('memberIDE');
   
-  $this->users_model->doacceptopenshift($openshiftID,$memberdata,$weekID);
+  
+
 
   $this->load->library('session');
+
+  $checkshift = $this->users_model->doacceptopenshift($openshiftID,$memberdata,$weekID);
+  print_r($checkshift);
+  if ( $checkshift == 1){
+    $data2['fail'] = false;
+    $data2['success'] = false;
+    $data2['full'] = true;
+  }else if ($checkshift == 2){
+    $data2['fail'] = false;
+    $data2['success'] = true;
+    $data2['full'] = false;
+  }else if ($checkshift == 3){
+    $data2['fail'] = true;
+    $data2['success'] = false;
+    $data2['full'] = false;
+  }
+
     $data2['test'] = $this->session->userdata('access');
 
     $data2['weekID'] = $weekID;
@@ -78,12 +99,10 @@ $data2['empshift'] =$this->users_model->doloadmeployeeshift($memberdata,$weekID)
     $data2['tableinfo'] = $this->users_model->tableinfoemp($weekID,$memberdata);
 
     
-//testing
-    
-    //$data2['schedule1'] =$this->users_model->doloadscheduleemployee($memberdata);
+
 
     $data2['open'] =$this->users_model->loadopenschedule();
-//testing
+
 $data2['empshift'] =$this->users_model->doloadmeployeeshift($memberdata,$weekID);
 
     $this->template->show('empweekinfo', $data2);

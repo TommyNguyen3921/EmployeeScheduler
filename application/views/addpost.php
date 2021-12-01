@@ -1,9 +1,10 @@
 <h2>Forum</h2>
 <h3 class="error"><?php echo validation_errors(); ?></h3>
 
-<h1>New Post</h1>
 
-<form method="POST" action="<?php echo base_url(); ?>index.php/Forum/submitpost">
+<div class="reportbox">
+<h1>New Post</h1>
+<form id="reportformbox" method="POST" action="<?php echo base_url(); ?>index.php/Forum/submitpost">
 
 <div class="form-group">
     <label for="exampleFormControlInput1">Topic</label>
@@ -18,3 +19,4 @@
   </div>
   <button type="submit" class="btn btn-lg btn-primary btn-block"><span class="glyphicon glyphicon-log-in"></span> Submit</button>
 </form>
+</div>

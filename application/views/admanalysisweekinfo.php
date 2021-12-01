@@ -1,9 +1,9 @@
-<h1><?= $weekID ?></h1>
+
 
 <h2>Employee Stat</h2>
 
-<h1><b>Week Start Date:</b> <?= $weekinfo[0]['startdate'] ?> <b>Week End Date:</b> <?= $weekinfo[0]['enddate'] ?></h1>
-<p>Select user</p>
+<h1 class="weekdays"><b>Week Start Date:</b> <?= $weekinfo[0]['startdate'] ?> <b>Week End Date:</b> <?= $weekinfo[0]['enddate'] ?></h1>
+<p><b>Select user</b>  </p>
 <select class="js-example-basic-single" name="state" id="sel_user">
   <option value="default">Default</option>
   <?php foreach ($member as $row) { ?>
@@ -15,17 +15,18 @@
 <br />
 <br />
 
-<p>Edit Table</p>
+<div id="edittable">
+<p><b>Edit Table</b> </p>
 <input type="radio" id="editvalue" name="editvalue" value="yes">
 <label for="age1">Yes</label><br>
-<input type="radio" id="editvalue" name="editvalue" value="no" checked="checked">
+<input type="radio" class="editvalue1" name="editvalue" value="no" checked="checked">
 <label for="age2">No</label><br>
-
+</div>
 
 <h2>User Table</h2>
 
-<p id="updatelabel">Successfully Updated</p>
-<table class="table table-striped">
+<p class="success" id="updatelabel">Successfully Updated</p>
+<table class="table table-dark">
 
   <tr>
 
@@ -61,15 +62,18 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script type='text/javascript'>
+
+$( "#edittable" ).hide();
    $("#updatelabel").hide();
   $(document).ready(function() {
     $('.js-example-basic-single').select2();
-    var username
-
+    var username;
+    
     $('#sel_user').change(function() {
       username = $(this).val();
-
+      $("INPUT[name=editvalue]").val(['no']);
       if (username != "default") {
+        $( "#edittable" ).show();
         $.ajax({
           url: '<?php echo base_url(); ?>index.php/Admanalysis/EmployeeDetails',
           method: 'post',
@@ -113,22 +117,24 @@
                 }
                 totalpay = totalpay + parseFloat(response[i].pay);
                 hours = hours + parseFloat(response[i].hours);
-                var Html = "<tr><td>" + day + "</td><td>" + response[i].latetoshift + "</td><td>$" + response[i].pay + "</td><td>" + response[i].hours + "</td></tr>";
+                var Html = "<tr class='table-light'><td>" + day + "</td><td>" + response[i].latetoshift + "</td><td>$" + response[i].pay + "</td><td>" + response[i].hours + "</td></tr>";
 
                 $('#tbody').append(Html);
 
               }
-              var Html = "<tr><td colspan='2'><b>Total Hours and Pay</b></td><td >$" + totalpay + "</td><td>" + hours + "</td></tr>";
+              var Html = "<tr class='table-light'><td colspan='2'><b>Total Hours and Pay</b></td><td >$" + totalpay + "</td><td>" + hours + "</td></tr>";
 
 
               $('#tbody').append(Html);
-
-
+             
             }
           }
         });
       } else {
         $("#tbody").empty();
+        $( "#edittable" ).hide();
+    
+        $("INPUT[name=editvalue]").val(['no']);
       }
     });
 
@@ -182,12 +188,21 @@
                   }
                   totalpay = totalpay + parseFloat(response[i].pay);
                   hours = hours + parseFloat(response[i].hours);
-                  var Html = "<tr><td>" + day + "</td><td><input type='text' id='fname' name='fname' value=" + response[i].latetoshift + "></td><td>$<input type='text' id='fname' name='fname' value=" + response[i].pay + "></td><td><input type='text' id='fname' name='fname' value=" + response[i].hours + "> <button id='editchanges' value=" + response[i].scheduleinfoID + " type='button'>Submit Change</button </td></tr>";
+
+                  var yesorno;
+                  if(response[i].latetoshift == "no"){
+                    yesorno = "<select><option value='yes'>yes</option><option selected='selected' value='no'>no</option></select>";
+                  }else{
+                    yesorno = "<select><option selected='selected' value='yes'>yes</option><option  value='no'>no</option></select>";
+                  }
+
+                  
+                  var Html = "<tr class='table-light'><td>" + day + "</td><td>" + yesorno + "</td><td>$<input type='text' id='fname' name='fname' value=" + response[i].pay + "></td><td><input type='text' id='fname' name='fname' value=" + response[i].hours + "> <button id='editchanges' value=" + response[i].scheduleinfoID + " type='button' class='btn btn-primary'>Submit Change</button </td></tr>";
 
                   $('#tbody').append(Html);
 
                 }
-                var Html = "<tr><td colspan='2'><b>Total Hours Pay</b></td><td >$" + totalpay + "</td><td>" + hours + "</td></tr>";
+                var Html = "<tr class='table-light'><td colspan='2'><b>Total Hours Pay</b></td><td >$" + totalpay + "</td><td>" + hours + "</td></tr>";
 
 
                 $('#tbody').append(Html);
@@ -240,12 +255,12 @@
                   }
                   totalpay = totalpay + parseFloat(response[i].pay);
                   hours = hours + parseFloat(response[i].hours);
-                  var Html = "<tr><td>" + day + "</td><td>" + response[i].latetoshift + "</td><td>$" + response[i].pay + "</td><td>" + response[i].hours + "</td></tr>";
+                  var Html = "<tr class='table-light'><td>" + day + "</td><td>" + response[i].latetoshift + "</td><td>$" + response[i].pay + "</td><td>" + response[i].hours + "</td></tr>";
 
                   $('#tbody').append(Html);
 
                 }
-                var Html = "<tr><td colspan='2'><b>Total Hours and Pay</b></td><td >$" + totalpay + "</td><td>" + hours + "</td></tr>";
+                var Html = "<tr class='table-light'><td colspan='2'><b>Total Hours and Pay</b></td><td >$" + totalpay + "</td><td>" + hours + "</td></tr>";
 
 
                 $('#tbody').append(Html);
@@ -261,7 +276,7 @@
     $(document).on('click', '#editchanges', function(e) {
       e.preventDefault();
       let tr = $(this).closest('tr');
-      let late = tr.find('td:eq(1) input').val();
+      let late = tr.find('td:eq(1) select').val();
       let pay = tr.find('td:eq(2) input').val();
       let hours = tr.find('td:eq(3) input').val();
       var scheduleID = $(this).val();
@@ -315,12 +330,19 @@
               }
               totalpay = totalpay + parseFloat(response[i].pay);
               hours = hours + parseFloat(response[i].hours);
-              var Html = "<tr><td>" + day + "</td><td><input type='text' id='fname' name='fname' value=" + response[i].latetoshift + "></td><td>$<input type='text' id='fname' name='fname' value=" + response[i].pay + "></td><td><input type='text' id='fname' name='fname' value=" + response[i].hours + "> <button id='editchanges' value=" + response[i].scheduleinfoID + " type='button'>Submit Change</button </td></tr>";
 
+              var yesorno;
+                  if(response[i].latetoshift == "no"){
+                    yesorno = "<select><option value='yes'>yes</option><option selected='selected' value='no'>no</option></select>";
+                  }else{
+                    yesorno = "<select><option selected='selected' value='yes'>yes</option><option  value='no'>no</option></select>";
+                  }
+
+                  var Html = "<tr class='table-light'><td>" + day + "</td><td>" + yesorno + "</td><td>$<input type='text' id='fname' name='fname' value=" + response[i].pay + "></td><td><input type='text' id='fname' name='fname' value=" + response[i].hours + "> <button id='editchanges' value=" + response[i].scheduleinfoID + " type='button ' class='btn btn-primary'>Submit Change</button </td></tr>";
               $('#tbody').append(Html);
 
             }
-            var Html = "<tr><td colspan='2'><b>Total Hours and Pay</b></td><td >$" + totalpay + "</td><td>" + hours + "</td></tr>";
+            var Html = "<tr class='table-light'><td colspan='2'><b>Total Hours and Pay</b></td><td >$" + totalpay + "</td><td>" + hours + "</td></tr>";
 
 
             $('#tbody').append(Html);
