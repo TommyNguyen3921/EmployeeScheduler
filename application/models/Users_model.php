@@ -102,11 +102,7 @@ class Users_model extends CI_Model
 			->where("from_memberID='$memberID' AND to_memberID='$usersend' OR from_memberID='$usersend' AND to_memberID='$memberID' ")
 			->order_by('timesent', 'ASC');
 
-		//->where('from_memberID ', $memberID)
-		//->where('to_memberID ', $senduser["senduser"])
-
-		//->or_where('from_memberID >', $senduser["senduser"])
-		//->where('to_memberID ', $memberID);
+	
 
 
 
@@ -142,26 +138,9 @@ class Users_model extends CI_Model
 
 		return $query->result_array();
 	}
-	//------
-	public function loadchat()
-	{
-
-		$this->db->select('member.name')
-			->select('chatmessage.messagedata')
-			->from('chatmessage')
-			->join('member', 'member.memberID = chatmessage.memberID');
+	
 
 
-		$query = $this->db->get();
-
-		return $query->result_array();
-	}
-
-	public function sendmessage($memberID, $message)
-	{
-
-		$query = $this->db->query("INSERT INTO chatmessage (memberID,messagedata) VALUES ('$memberID', '$message');");
-	}
 
 	//---------------------------------------create account page
 	public function loadaccounts()
@@ -202,28 +181,7 @@ class Users_model extends CI_Model
 
 		$query = $this->db->query("INSERT INTO login (username,password) VALUES ('$user', '$password');");
 		$query = $this->db->query("INSERT INTO member (name,level) VALUES ('$name', '$level');");
-		if ($level == 0) {
-
-
-
-			$this->db->select('memberID')
-				->from('member')
-				->where('name', $name);;
-
-
-			$query = $this->db->get();
-			$memberID = $query->result_array();
-
-			$member = $memberID[0]["memberID"];
-
-			$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Sunday', '0', '0');");
-			$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Monday', '0', '0');");
-			$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Tuesday', '0', '0');");
-			$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Wednesday 	', '0', '0');");
-			$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Thursday', '0', '0');");
-			$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Friday', '0', '0');");
-			$query = $this->db->query("INSERT INTO scheduler (memberID,timeofday,startdatetime,enddatetime) VALUES ('$member', 'Saturday', '0', '0');");
-		}
+	
 	}
 
 

@@ -18,26 +18,18 @@ class Chat extends CI_Controller {
     $this->load->library('session');
 			$data2['test'] = $this->session->userdata('access');
 
-            $data2['chat'] = $this->users_model->loadchat();
-//loaduser chat
+            
+
             $memberdata = $this->session->userdata('memberIDE');
             $data2['chatuser'] = $this->users_model->loadchatuser($memberdata);
 
-//
+
 
 			
     $this->template->show('chat',$data2);
   }
 
-  public function sendmessage(){
  
-    $message = $_POST['message'];
- $memberdata = $this->session->userdata('memberIDE');
- 
-    $data = $this->users_model->Sendmessage($memberdata, $message);
-
-    $this->index();
-}
 
 public function messagehistory(){
   // POST data
