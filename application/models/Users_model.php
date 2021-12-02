@@ -7,9 +7,9 @@ class Users_model extends CI_Model
 		$this->load->database();
 	}
 
-	public function login($email, $password)
+	public function login($email)
 	{
-		$query = $this->db->get_where('login', array('username' => $email, 'password' => $password));
+		$query = $this->db->get_where('login', array('username' => $email));
 		return $query->row_array();
 	}
 
@@ -20,7 +20,7 @@ class Users_model extends CI_Model
 		$query = $this->db->query("INSERT INTO bugreport (memberID,topic,message) VALUES ('$user', '$topic', '$description');");
 	}
 
-	public function checklogin($email, $password)
+	public function checklogin($email)
 	{
 
 		$this->db->select('member.name')
@@ -28,8 +28,7 @@ class Users_model extends CI_Model
 			->select('member.memberID')
 			->from('member')
 			->join('login', 'login.loginID = member.memberID')
-			->where('username', $email)
-			->where('password', $password);
+			->where('username', $email);
 
 		$query = $this->db->get();
 
@@ -260,8 +259,32 @@ class Users_model extends CI_Model
 			$this->db->query("DELETE FROM bugreport where memberID = '$memberID';");
 			$this->db->query("DELETE FROM member where memberID = '$memberID';");
 			$this->db->query("DELETE FROM login where loginID = '$memberID';");
-			$this->db->query("DELETE FROM scheduler where memberID = '$memberID';");
+			$this->db->query("DELETE FROM schedulerinfo where memberID = '$memberID';");
+			$this->db->query("DELETE FROM chatboxmessages where from_memberID = '$memberID' or to_memberID = '$memberID';");
+
 		}
+	}
+
+	public function doresetpass($resetvalue)
+	{
+
+		$hashed_password = password_hash($resetvalue['temppass'], PASSWORD_DEFAULT);
+
+		$data1 = array(
+			'password' => $hashed_password
+		);
+
+		$this->db->where('loginID', $resetvalue["memberID"]);
+		$this->db->update('login', $data1);
+
+		$this->db->select('username')
+			->from('login')
+			->where('loginID', $resetvalue["memberID"]);
+
+
+		$query = $this->db->get();
+
+		return $query->result_array();
 	}
 
 	//---------------------------------------Forum Page page
@@ -1209,6 +1232,9 @@ class Users_model extends CI_Model
 
 		$this->db->where('scheduleinfoID', $shiftID);
 		$this->db->delete('employeestat');
+
+		$this->db->where('scheduleinfoID', $shiftID);
+		$this->db->delete('pendingusershifts');
 	}
 
 
@@ -1554,6 +1580,59 @@ class Users_model extends CI_Model
 		
 
 	}
+	//profile page
+	public function loadprofile($memberID)
+	{
+
+		$this->db->select('*')
+			
+			->from('login')
+			->join('member', 'member.memberID = login.loginID')
+			->where('login.loginID ', $memberID);
 
 
+		$query = $this->db->get();
+
+		return $query->result_array();
+
+
+		
+
+	}
+
+	public function doupdateprofile($memberID,$user)
+	{
+
+		$data1 = array(
+			'username' => $user,
+			
+			
+		);
+
+		$this->db->where('loginID', $memberID);
+		$this->db->update('login', $data1);
+
+
+		
+
+	}
+
+	public function doupdatepassword($memberID,$password)
+	{
+
+		$data1 = array(
+			'password' => $password
+			
+			
+		);
+
+		$this->db->where('loginID', $memberID);
+		$this->db->update('login', $data1);
+
+
+		
+
+	}
+
+	
 }

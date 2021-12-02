@@ -5,6 +5,7 @@ body {
 h1{
   color:black;
   font-family: "Times New Roman";
+  text-decoration: underline;
 }
 h2{
   color:#2832c2;
@@ -372,6 +373,9 @@ a:active {
   color:red;
 }
 
+#divborder{
+  border: 5px solid black;
+}
 #formshift {
   background-color: lightskyblue;
 }
@@ -387,7 +391,9 @@ table#shiftvalue {
 .tablefilter {
   width: 100%;
 }
-
+.row{
+  width: 100%;
+}
 table.tablefilter td:hover{
   background-color: blue;
   cursor: pointer;

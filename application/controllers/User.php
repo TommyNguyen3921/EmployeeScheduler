@@ -33,12 +33,14 @@
     		$email = $_POST['email'];
     		$password = $_POST['password'];
      
-    		$data = $this->users_model->login($email, $password);
-		
+    		$data = $this->users_model->login($email);
+			
+
+			$checkcred = password_verify($password, $data['password']);
 
 			
-    		if($data){
-				$data1['test'] = $this->users_model->checklogin($email, $password);
+    		if($checkcred){
+				$data1['test'] = $this->users_model->checklogin($email);
 				$testdata  = $data1['test'];
 				//print_r($testdata[0]['memberID']);
 				

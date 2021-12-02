@@ -65,8 +65,9 @@ public function create(){
     $password = $_POST['password'];
     $level = $_POST['level'];
  
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    $this->users_model->addaccount($name,$user,$password,$level);
+    $this->users_model->addaccount($name,$user,$hashed_password,$level);
         
 	//print_r($level);
     
@@ -81,6 +82,7 @@ public function create(){
   //print_r($data2);
 $this->template->show('createacc',$data2);
 }
+
 }
 
 public function delete($memberID)
@@ -102,5 +104,15 @@ public function delete($memberID)
       }
   //print_r($data2);
 $this->template->show('createacc',$data2);
+}
+
+public function resetpass(){
+   
+  $resetvalue = $this->input->post();
+
+  // get data
+  $data = $this->users_model->doresetpass($resetvalue);
+ 
+  echo json_encode($data);
 }
 }

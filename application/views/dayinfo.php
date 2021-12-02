@@ -2,24 +2,24 @@
 
 
 <?php if ($day == 1) { ?>
-    <h1>Sunday</h1>
+    <h1><b>Sunday</b>  </h1>
 <?php } else if ($day == 2) { ?>
-    <h1>Monday</h1>
+    <h1><b>Monday</b></h1>
 <?php } else if ($day == 3) { ?>
-    <h1>Tuesday</h1>
+    <h1><b>Tuesday</b></h1>
 <?php } else if ($day == 4) { ?>
-    <h1>Wednesday</h1>
+    <h1><b><Wednesday/b></h1>
 <?php } else if ($day == 5) { ?>
-    <h1>Thursday</h1>
+    <h1><b>Thursday</b></h1>
 <?php } else if ($day == 6) { ?>
-    <h1>Friday</h1>
+    <h1><b>Friday</b></h1>
 <?php } else { ?>
-    <h1>Saturday</h1>
+    <h1><b>Saturday</b></h1>
 <?php } ?>
 
 
 
-<h1><b>Week Start Date:</b> <?= $weekdate[0]['startdate'] ?> <b>Week End Date:</b> <?= $weekdate[0]['enddate'] ?></h1>
+<h1 class="weekdays"><b>Week Start Date:</b> <?= $weekdate[0]['startdate'] ?> <b>Week End Date:</b> <?= $weekdate[0]['enddate'] ?></h1>
 <ul class="nav navbar-light bg-light justify-content-center">
 <li class="nav-item">
     <a class="nav-link " href=" <?= base_url() ?>index.php?/Setupschedule/moreinfo/<?= $weekID ?>">default</a>
@@ -48,7 +48,8 @@
 </ul>
 
 <div class=" bg-secondary sticky-top">
-<div class="row ">
+<h1><b>Schedule Employee into Shift</b>  </h1>
+<div class="row " id="divborder">
     <div class="col-md-4 ">
         <h1>Available Employees</h1>
         <input id="myInput" type="text" placeholder="Search..">
@@ -171,13 +172,13 @@
                 </select>
             </div>
         </div>
-        <input type="button" id="shiftaddbutton" name="OK" class="btn btn-lg btn-primary btn-block" value="OK" />
+        <input type="button" id="shiftaddbutton" name="OK" class="btn btn-lg btn-primary btn-block" value="Add To Shift" />
 
 
     </div>
 </div>
-
-<div class="row ">
+<h1><b>Shift Stat</b>  </h1>
+<div class="row " id="divborder" >
   <div class="col-md-6 ">
   <h1>Schedule Employee</h1>
         <input id="Inputscheduleemployee" type="text" placeholder="Search..">
@@ -233,7 +234,7 @@
   </button>
   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
   <?php foreach ($shiftstables as $row) { ?>
-    <a class="dropdown-item" href='#table<?= $row['start'] ?><?= $row['startampm'] ?>-<?= $row['end'] ?><?= $row['startampm'] ?>'><?= $row['start'] ?><?= $row['endampm'] ?>-<?= $row['end'] ?><?= $row['startampm'] ?></a>
+    <a class="dropdown-item" href='#table<?= $row['start'] ?><?= $row['startampm'] ?>-<?= $row['end'] ?><?= $row['endampm'] ?>'><?= $row['start'] ?><?= $row['startampm'] ?>-<?= $row['end'] ?><?= $row['endampm'] ?></a>
     
     <?php } ?>
   </div>

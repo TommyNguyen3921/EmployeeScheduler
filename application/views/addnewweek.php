@@ -130,7 +130,7 @@
 </div>
 </div>
 <h1>Sunday</h1>
-<table class="table table-striped" id="Sunday">
+<table class="table table-dark" id="Sunday">
 
   <tr>
 
@@ -149,7 +149,7 @@
 </table>
 
 <h1>Monday</h1>
-<table class="table table-striped" id="Monday">
+<table class="table table-dark" id="Monday">
 
   <tr>
 
@@ -168,7 +168,7 @@
 </table>
 
 <h1>Tuesday</h1>
-<table class="table table-striped" id="Tuesday">
+<table class="table table-dark" id="Tuesday">
 
   <tr>
 
@@ -187,7 +187,7 @@
 </table>
 
 <h1>Wednesday</h1>
-<table class="table table-striped" id="Wednesday">
+<table class="table table-dark" id="Wednesday">
 
   <tr>
 
@@ -206,7 +206,7 @@
 </table>
 
 <h1>Thursday</h1>
-<table class="table table-striped" id="Thursday">
+<table class="table table-dark" id="Thursday">
 
   <tr>
 
@@ -225,7 +225,7 @@
 </table>
 
 <h1>Friday</h1>
-<table class="table table-striped" id="Friday">
+<table class="table table-dark" id="Friday">
 
   <tr>
 
@@ -245,7 +245,7 @@
 
 
 <h1>Saturday</h1>
-<table class="table table-striped" id="Saturday">
+<table class="table table-dark" id="Saturday">
 
   <tr>
 
@@ -288,7 +288,7 @@
       createdshift['people'] = $( "select#people" ).val();
       allitem.push(createdshift);
 
-      var Html="<tr><td>"+$( "select#start" ).val()+$( "select#startampm" ).val()+"-"+ $( "select#end" ).val()+$( "select#endampm" ).val()+"</td><td>"+$( "select#start" ).val()+$( "select#startampm" ).val()+"</td><td>"+$( "select#end" ).val()+$( "select#endampm" ).val()+"</td><td>"+$( "select#people" ).val()+"</td></tr>";
+      var Html="<tr class='table-light'><td>"+$( "select#start" ).val()+$( "select#startampm" ).val()+"-"+ $( "select#end" ).val()+$( "select#endampm" ).val()+"</td><td>"+$( "select#start" ).val()+$( "select#startampm" ).val()+"</td><td>"+$( "select#end" ).val()+$( "select#endampm" ).val()+"</td><td>"+$( "select#people" ).val()+"</td></tr>";
       if($( "select#date" ).val()==1){
         $('#tbody').append(Html);
       }else if($( "select#date" ).val()==2){
