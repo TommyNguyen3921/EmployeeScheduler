@@ -245,9 +245,9 @@ class Users_model extends CI_Model
 
 		$result2 = $query2->num_rows();
 
+	
 
-
-		if (($result['level'] == 1 or $result['level'] == 2) and $result2 == 1) {
+		if ( $result['level'] == 2 and $result2 == 1) {
 
 			return true;
 		} else {
@@ -369,107 +369,9 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
-	public function getmembersinfo($memberID)
-	{
 
 
-		$this->db->select('*')
-			->from('stat')
-			->where('memberID', $memberID["memberID"]);
-
-
-		$query = $this->db->get();
-
-		return $query->result_array();
-	}
-	public function doadddetails($data)
-	{
-
-
-
-
-
-		$data1 = array(
-			'memberID' => $data['user'],
-			'Date' => $data['date'],
-			'shiftchanges' => $data['change'],
-			'latetoshift' => $data['lates'],
-			'pay' => $data['pay'],
-			'hours' => $data["hours"]
-		);
-
-		$this->db->insert('stat', $data1);
-
-		$this->db->select('*')
-			->from('stat')
-			->where('memberID', $data1["memberID"]);
-
-
-		$query = $this->db->get();
-
-		return $query->result_array();
-	}
-	public function dodeletestat($statID)
-	{
-
-
-		$this->db->where('statID', $statID["statID"]);
-		$this->db->delete('stat');
-
-
-		$this->db->select('*')
-			->from('stat')
-			->where('memberID', $statID["user"]);
-
-
-		$query = $this->db->get();
-
-		return $query->result_array();
-	}
-
-	public function doupdate($statID)
-	{
-
-
-
-
-
-		$this->db->select('*')
-			->from('stat')
-			->where('statID', $statID["statID"]);
-
-
-		$query = $this->db->get();
-
-		return $query->result_array();
-	}
-
-	public function doupdatevalue($data)
-	{
-
-
-
-		$data1 = array(
-			'memberID' => $data['user'],
-			'Date' => $data['date'],
-			'shiftchanges' => $data['change'],
-			'latetoshift' => $data['lates'],
-			'pay' => $data['pay'],
-			'hours' => $data["hours"]
-		);
-
-		$this->db->where('statID', $data["statid"]);
-		$this->db->update('stat', $data1);
-
-		$this->db->select('*')
-			->from('stat')
-			->where('memberID', $data["user"]);
-
-
-		$query = $this->db->get();
-
-		return $query->result_array();
-	}
+	
 
 	public function loadanalysis($member)
 	{
@@ -485,83 +387,12 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 	//---------------------------------------schedule set up page	
-	public function getmemberssetup()
-	{
+	
 
-		$this->db->select('memberID')
-			->select('name')
-			->from('member')
-			->where('level', 0);
+	
+	
 
-
-
-		$query = $this->db->get();
-
-		return $query->result_array();
-	}
-
-	public function loadschedule()
-	{
-
-
-		//$query = $this->db->query("SELECT member.name,(GROUP_CONCAT(scheduler.timeofday ) as days) FROM member JOIN scheduler ON member.memberID=scheduler.memberID;");
-		//$this->db->select('member.name')
-		//->select('GROUP_CONCAT(scheduler.timeofday ) as days')
-		//->select('scheduler.timeofday')
-		//->from('member')
-		//->join('scheduler', 'scheduler.memberID = member.memberID') ;
-		//$this->db->group_by('member.name'); 
-
-		//$query = $this->db->get();
-
-		//return $query->result_array();
-		return $this->db->query('SELECT member.name,GROUP_CONCAT(IF(scheduler.timeofday = "Sunday", scheduler.startdatetime, NULL)) as days
-		,GROUP_CONCAT(IF(scheduler.timeofday = "Sunday", scheduler.enddatetime, NULL)) as edays
-		,GROUP_CONCAT(IF(scheduler.timeofday = "Monday", scheduler.startdatetime, NULL)) as days1
-		,GROUP_CONCAT(IF(scheduler.timeofday = "Monday", scheduler.enddatetime, NULL)) as edays1
-		,GROUP_CONCAT(IF(scheduler.timeofday = "Tuesday", scheduler.startdatetime, NULL)) as days2
-		,GROUP_CONCAT(IF(scheduler.timeofday = "Tuesday", scheduler.enddatetime, NULL)) as edays2
-		,GROUP_CONCAT(IF(scheduler.timeofday = "Wednesday", scheduler.startdatetime, NULL)) as days3
-		,GROUP_CONCAT(IF(scheduler.timeofday = "Wednesday", scheduler.enddatetime, NULL)) as edays3
-		,GROUP_CONCAT(IF(scheduler.timeofday = "Thursday", scheduler.startdatetime, NULL)) as days4
-		,GROUP_CONCAT(IF(scheduler.timeofday = "Thursday", scheduler.enddatetime, NULL)) as edays4
-		,GROUP_CONCAT(IF(scheduler.timeofday = "Friday", scheduler.startdatetime, NULL)) as days5
-		,GROUP_CONCAT(IF(scheduler.timeofday = "Friday", scheduler.enddatetime, NULL)) as edays5
-		,GROUP_CONCAT(IF(scheduler.timeofday = "Saturday", scheduler.startdatetime, NULL)) as days6
-		,GROUP_CONCAT(IF(scheduler.timeofday = "Saturday", scheduler.enddatetime, NULL)) as edays6 FROM member JOIN scheduler ON member.memberID=scheduler.memberID GROUP BY member.name;')->result_array();
-	}
-	public function doaddschedule($member, $date, $start, $end)
-	{
-
-		$data1 = array(
-
-			'startdatetime' => $start,
-			'enddatetime' => $end
-		);
-
-
-		$this->db->where('memberID', $member);
-		$this->db->where('timeofday', $date);
-		$this->db->update('scheduler', $data1);
-	}
-
-	public function doreset()
-	{
-
-		$this->db->where('memberID', 0);
-		$this->db->delete('scheduler');
-
-		$this->db->where('pendingID >', 0);
-		$this->db->delete('pendingshift');
-
-		$this->db->where('openshiftID >', 0);
-		$this->db->delete('openshift');
-
-
-		$this->db->set('startdatetime', '0', FALSE);
-		$this->db->set('enddatetime', '0', FALSE);
-		$this->db->update('scheduler');
-	}
+	
 
 	//---------------------------------------schedule menu page	
 
@@ -581,50 +412,11 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
-	public function dopending($shiftID)
-	{
-
-		$this->db->select('scheduleID')
-			->from('pendingshift')
-			->where('scheduleID', $shiftID["shiftID"]);
-
-
-		$query = $this->db->get();
-
-		$result = $query->row_array();
-
-		if (!empty($result)) {
-
-			return false;
-		} else {
-
-			$data = array(
-				'scheduleID' => $shiftID["shiftID"]
-			);
-
-			$this->db->insert('pendingshift', $data);
-			return true;
-		}
-	}
+	
 
 	//---------------------------------------schedule admin/mananger menu page	
 
-	function loadpendingschedule()
-	{
-		$this->db->select('scheduler.timeofday')
-			->select('scheduler.startdatetime')
-			->select('scheduler.enddatetime')
-			->select('member.name')
-			->select('pendingshift.pendingID')
-			->from('scheduler')
-			->join('pendingshift', 'pendingshift.scheduleID = scheduler.scheduleID')
-			->join('member', 'member.memberID = scheduler.memberID');
-
-
-		$query = $this->db->get();
-
-		return $query->result_array();
-	}
+	
 	function loadopenschedule()
 	{
 		$this->db->select('scheduler.timeofday')
@@ -640,98 +432,9 @@ class Users_model extends CI_Model
 
 		return $query->result_array();
 	}
-	public function dopenddecline($pendID)
-	{
+	
 
-
-		$this->db->where('pendingID', $pendID["pendID"]);
-		$this->db->delete('pendingshift');
-	}
-
-	public function dopendaccept($pendID)
-	{
-
-
-		$this->db->select('scheduleID')
-			->from('pendingshift')
-			->where('pendingID', $pendID["pendID"]);
-
-
-		$getvalue = $this->db->get();
-
-		$scheduleID = $getvalue->result_array();
-
-		$data1 = array(
-			'scheduleID' => $scheduleID[0]['scheduleID']
-
-		);
-
-		$this->db->insert('openshift', $data1);
-
-
-		$this->db->select('*')
-			->from('scheduler')
-			->where('scheduleID', $scheduleID[0]['scheduleID']);
-
-
-		$query1 = $this->db->get();
-
-		$schedulevalue = $query1->result_array();
-
-
-
-		$data2 = array(
-			'memberID' => $schedulevalue[0]['memberID'],
-			'timeofday' => $schedulevalue[0]['timeofday'],
-			'startdatetime' => 0,
-			'enddatetime' => 0,
-
-		);
-
-		$this->db->insert('scheduler', $data2);
-
-
-
-
-
-		$data = array(
-			'memberID' => 0
-
-		);
-
-		$this->db->where('scheduleID', $scheduleID[0]['scheduleID']);
-		$this->db->update('scheduler', $data);
-
-
-		$this->db->select('scheduleID')
-			->from('openshift')
-			->order_by('openshiftID', 'DESC')
-			->limit(1);
-
-		$query2 = $this->db->get();
-
-		$result = $query2->result_array();
-
-
-
-		$this->db->where('pendingID', $pendID["pendID"]);
-		$this->db->delete('pendingshift');
-
-
-		$this->db->select('scheduler.timeofday')
-			->select('scheduler.startdatetime')
-			->select('scheduler.enddatetime')
-			->select('openshift.openshiftID')
-			->select('scheduler.scheduleID')
-			->from('scheduler')
-			->join('openshift', 'openshift.scheduleID = scheduler.scheduleID')
-			->where('scheduler.scheduleID', $result[0]["scheduleID"]);
-
-
-		$query3 = $this->db->get();
-
-		return $query3->result_array();
-	}
+	
 
 	public function dopendname($pendID)
 	{
@@ -747,118 +450,9 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
-	public function doopenshiftdelete($openshiftID)
-	{
+	
 
-
-		$this->db->select('scheduleID')
-
-			->from('openshift')
-
-			->where('openshiftID', $openshiftID["openshiftID"]);
-
-
-		$query = $this->db->get();
-
-		$result = $query->result_array();
-
-		$this->db->where('scheduleID', $result[0]["scheduleID"]);
-		$this->db->delete('scheduler');
-
-		$this->db->where('openshiftID', $openshiftID["openshiftID"]);
-		$this->db->delete('openshift');
-	}
-
-	public function doopenshiftaccept($openshiftID, $memberdata)
-	{
-		$this->db->select('scheduler.timeofday')
-
-			->from('scheduler')
-			->join('openshift', 'openshift.scheduleID = scheduler.scheduleID')
-			->where('openshift.openshiftID', $openshiftID["openshiftID"]);
-
-
-		$check = $this->db->get();
-
-		$shiftcheck = $check->row_array();
-
-
-		$this->db->select('startdatetime')
-			->from('scheduler')
-			->where('memberID', $memberdata)
-			->where('timeofday', $shiftcheck["timeofday"]);
-
-
-		$check1 = $this->db->get();
-
-		$shiftcheck2 = $check1->row_array();
-
-
-
-
-		if ($shiftcheck2["startdatetime"] != 0) {
-			return false;
-		} else {
-
-
-			$this->db->select('scheduler.enddatetime')
-				->select('scheduler.startdatetime')
-				->select('scheduler.timeofday')
-				->select('scheduler.scheduleID')
-				->from('scheduler')
-				->join('openshift', 'openshift.scheduleID = scheduler.scheduleID')
-				->where('openshift.openshiftID', $openshiftID["openshiftID"]);
-
-
-			$query = $this->db->get();
-
-			$shiftvalue = $query->result_array();
-
-			$this->db->select('scheduleID')
-				->from('scheduler')
-				->where('memberID', $memberdata)
-				->where('timeofday', $shiftvalue[0]["timeofday"]);
-
-
-			$query1 = $this->db->get();
-
-			$updateidvalue = $query1->result_array();
-
-			$data1 = array(
-
-				'startdatetime' => $shiftvalue[0]["startdatetime"],
-				'enddatetime' => $shiftvalue[0]["enddatetime"]
-			);
-
-
-
-			$this->db->where('timeofday', $shiftvalue[0]["timeofday"]);
-			$this->db->where('memberID', $memberdata);
-			$this->db->update('scheduler', $data1);
-
-
-			$this->db->where('openshiftID', $openshiftID["openshiftID"]);
-			$this->db->delete('openshift');
-
-			$this->db->where('scheduleID', $shiftvalue[0]["scheduleID"]);
-			$this->db->delete('scheduler');
-
-
-			$this->db->select('scheduler.timeofday')
-				->select('scheduler.startdatetime')
-				->select('scheduler.enddatetime')
-				->select('scheduler.scheduleID')
-				->select('member.name')
-				->from('scheduler')
-				->join('member', 'member.memberID = scheduler.memberID')
-				->where('scheduler.scheduleID', $updateidvalue[0]["scheduleID"]);
-
-
-			$query2 = $this->db->get();
-
-			return $query2->result_array();
-		}
-	}
+	
 
 	//admscheduler setup
 	public function addweek($item)
@@ -951,10 +545,23 @@ class Users_model extends CI_Model
 
 		$result1 = $query1->result_array();
 
+		//get first value from builtshift
+
+		$this->db->select('*')
+			->from('builtshift')
+			->where('weekID', $result[0]["weekID"])
+			->order_by('builtshiftID', 'ASC')
+			->limit(1);
+
+		$query1 = $this->db->get();
+
+		$builtshiftID1 = $query1->result_array();
+
 		//select all shift from the previous week
 		$this->db->select('*')
 			->from('schedulerinfo')
-			->where('weekID', $result[0]["weekID"]);
+			->where('weekID', $result[0]["weekID"])
+			->order_by('builtshiftID', 'ASC');
 
 		$query3 = $this->db->get();
 
@@ -971,6 +578,8 @@ class Users_model extends CI_Model
 		$result2 = $query2->result_array();
 
 
+		
+		
 		foreach ($result1 as $row) {
 			$data2 = array(
 				'start' => $row['start'],
@@ -984,9 +593,22 @@ class Users_model extends CI_Model
 			);
 
 			$this->db->insert('builtshift', $data2);
+			
 		}
 
+		//get second value from builtshift
 
+		$this->db->select('*')
+			->from('builtshift')
+			->where('weekID', $result2[0]["weekID"])
+			->order_by('builtshiftID', 'ASC')
+			->limit(1);
+
+		$query8 = $this->db->get();
+
+		$builtshiftID2 = $query8->result_array();
+
+		$count = $builtshiftID2[0]["builtshiftID"] - $builtshiftID1[0]["builtshiftID"];
 		foreach ($result3 as $row) {
 			$data3 = array(
 				'memberID' => $row['memberID'],
@@ -994,7 +616,7 @@ class Users_model extends CI_Model
 				'timeofday' => $row['timeofday'],
 				'shifttime' => $row['shifttime'],
 				'modtime' => $row["modtime"],
-				'builtshiftID' => $row["builtshiftID"]
+				'builtshiftID' => ($row["builtshiftID"] + $count)
 
 			);
 
@@ -1485,7 +1107,7 @@ class Users_model extends CI_Model
 		$result = $query->result_array();
 
 
-		print_r($result[0]["scheduleinfoID"]);
+		
 
 		$data = array(
 			'builtshiftID' => $result[0]["builtshiftID"]

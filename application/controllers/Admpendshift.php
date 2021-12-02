@@ -19,7 +19,7 @@ class Admpendshift extends CI_Controller {
 			$data2['test'] = $this->session->userdata('access');
 
             $data2['loadweeks'] = $this->users_model->loadweekpend();
-            print_r($data2['loadweeks']);
+           
     $this->template->show('admpendshiftweek',$data2);
   }
 
@@ -34,11 +34,11 @@ class Admpendshift extends CI_Controller {
     $data2['weekinfo'] = $this->users_model->weekinfo($weekID);
 
     
-    //print_r($data2['weekinfo']);
+   
 
     $data2['shiftpending'] = $this->users_model->weekpendingshifts($weekID);
 
-    print_r($data2['shiftpending']);
+   
 
     $stack = array();
     if($data2['shiftpending'] == NULL){
@@ -73,7 +73,7 @@ class Admpendshift extends CI_Controller {
     $data2['loadshiftslot'] = $this->users_model->doshiftslot($weekID, $day);
 
     $data2['open'] =$this->users_model->loadavailshift($weekID, $day);
-    print_r($data2['open']);
+    
     $this->template->show('admpendshiftdayinfo', $data2);
   }
 

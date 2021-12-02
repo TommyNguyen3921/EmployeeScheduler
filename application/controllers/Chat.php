@@ -25,7 +25,7 @@ class Chat extends CI_Controller {
 
 //
 
-			//print_r($data2);
+			
     $this->template->show('chat',$data2);
   }
 
@@ -33,7 +33,7 @@ class Chat extends CI_Controller {
  
     $message = $_POST['message'];
  $memberdata = $this->session->userdata('memberIDE');
- //print_r($memberdata);
+ 
     $data = $this->users_model->Sendmessage($memberdata, $message);
 
     $this->index();

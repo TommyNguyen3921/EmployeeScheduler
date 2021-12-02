@@ -29,8 +29,7 @@
       <label for="exampleFormControlSelect1">Access level</label>
       <select class="form-control" name="level">
         <option value="0">Employee</option>
-        <option value="1">Manager</option>
-        <option value="2">Adminstrator</option>
+        <option value="2">Manager</option>
 
       </select>
     </div>
@@ -39,7 +38,7 @@
 </div>
 
 <?php if ($deletecheck) { ?>
-  <h3 class="error">Cannot delete if only 1 Manager or Adminstrator</h3>
+  <h3 class="error">Cannot delete if only 1 Manager</h3>
 <?php } ?>
 
 <h2>User Table</h2>
@@ -66,10 +65,8 @@
       
       <?php if ($row['level'] == 0) { ?>
         <td>Employee</td>
-      <?php } else if ($row['level'] == 1) { ?>
-        <td>Manager</td>
       <?php } else { ?>
-        <td>Adminstrator</td>
+        <td>Manager</td>
       <?php } ?>
       <td><button class='like btn btn-secondary' id='reset' value="<?= $row['memberID'] ?>">Reset Password</button></td>
       <td><a class="btn btn-danger" href="<?= base_url() ?>index.php?/Createacc/delete/<?= $row['memberID'] ?>">X</a></td>

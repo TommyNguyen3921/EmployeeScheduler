@@ -48,7 +48,23 @@
 				$accesslevel = $data1['test'];
 				$this->session->set_userdata('access',$accesslevel);
     			$this->session->set_userdata('home', $data1);
-    			$this->template->show('home',$data1);
+				if($accesslevel[0]['level'] == 2){
+				
+				$data2['test'] = $this->session->userdata('access');
+
+            $data2['loadweeks'] = $this->users_model->loadweekpend();
+
+    			$this->template->show('admpendshiftweek',$data2);
+				}else{
+
+					$data2['test'] = $this->session->userdata('access');
+
+					$data2['loadweeks'] = $this->users_model->loadweeks();
+		
+		
+			$this->template->show('empshiftweek',$data2);
+			
+				}
     		}
     		else{
 				$data1['error'] = true;

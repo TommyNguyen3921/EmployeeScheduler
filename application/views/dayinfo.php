@@ -8,7 +8,7 @@
 <?php } else if ($day == 3) { ?>
     <h1><b>Tuesday</b></h1>
 <?php } else if ($day == 4) { ?>
-    <h1><b><Wednesday/b></h1>
+    <h1><b>Wednesday</b></h1>
 <?php } else if ($day == 5) { ?>
     <h1><b>Thursday</b></h1>
 <?php } else if ($day == 6) { ?>
@@ -50,7 +50,9 @@
 <div class=" bg-secondary sticky-top">
 <h1><b>Schedule Employee into Shift</b>  </h1>
 <div class="row " id="divborder">
-    <div class="col-md-4 ">
+    
+    <div class="col-md-4 " >
+    <div id="sizescheduler" class="overflow-auto"> 
         <h1>Available Employees</h1>
         <input id="myInput" type="text" placeholder="Search..">
         <table class="tablefilter " id="table">
@@ -73,6 +75,7 @@
 
 
         </table>
+    </div>
     </div>
     <div class="col-md-4 ">
         <h1>Shifts</h1>
@@ -390,7 +393,7 @@
             //if shift slot is full change the color to green else its red
             if(truevalue==0){
                 $(t[0].rows[s-1].cells[0]).addClass("fullshift");
-            $(t[0].rows[s-1].cells[1]).addClass("fullshift");
+                $(t[0].rows[s-1].cells[1]).addClass("fullshift");
             }else{
                 $(t[0].rows[s-1].cells[1]).addClass("notfullshift");
             }
