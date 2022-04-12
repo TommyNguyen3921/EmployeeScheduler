@@ -13,13 +13,16 @@ class Users_model extends CI_Model
 		return $query->row_array();
 	}
 
-
+	/**
+	 * add report to database
+	 */
 	public function Sendreport($user, $topic, $description)
 	{
 
 		$query = $this->db->query("INSERT INTO bugreport (memberID,topic,message) VALUES ('$user', '$topic', '$description');");
 	}
 
+	//get login user information
 	public function checklogin($email)
 	{
 
@@ -35,6 +38,9 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
+	/**
+	 * get all reports
+	 */
 	public function loadreport()
 	{
 
@@ -49,11 +55,18 @@ class Users_model extends CI_Model
 
 		return $query->result_array();
 	}
+
+	/**
+	 * delete bug report 
+	 */
 	function dosolve($reportid)
 	{
 		$query = $this->db->query("DELETE FROM bugreport where reportID = '$reportid';");
 	}
 
+	/**
+	 * display more imformation of bug report
+	 */
 	function showmoreinfo($reportid)
 	{
 		$this->db->select('member.name')
@@ -73,7 +86,9 @@ class Users_model extends CI_Model
 
 
 
-
+	/**
+	 * get all user for chat
+	 */
 	public function loadchatuser($memberID)
 	{
 
@@ -87,6 +102,9 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
+	/**
+	 * get the message history bettwen users
+	 */
 	public function getmessagehistory($memberID, $senduser)
 	{
 
@@ -102,7 +120,7 @@ class Users_model extends CI_Model
 			->where("from_memberID='$memberID' AND to_memberID='$usersend' OR from_memberID='$usersend' AND to_memberID='$memberID' ")
 			->order_by('timesent', 'ASC');
 
-	
+
 
 
 
@@ -110,8 +128,13 @@ class Users_model extends CI_Model
 
 		return $query->result_array();
 	}
+	/**
+	 * send data tot able and get the value to display
+	 */
 	public function domessagesend($memberID, $senduser)
 	{
+
+		//add new message tod ata
 		$data = array(
 			'from_memberID' => $memberID,
 			'to_memberID' => $senduser["senduser"],
@@ -120,6 +143,7 @@ class Users_model extends CI_Model
 
 		$this->db->insert('chatboxmessages', $data);
 
+		//get new message value
 		$usersend = $senduser["senduser"];
 		$this->db->select('a.name as user')
 			->select('b.name as sent ')
@@ -138,11 +162,15 @@ class Users_model extends CI_Model
 
 		return $query->result_array();
 	}
-	
+
 
 
 
 	//---------------------------------------create account page
+
+	/**
+	 * get all the user account
+	 */
 	public function loadaccounts()
 	{
 
@@ -160,6 +188,9 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
+	/**
+	 * check if user name is in database
+	 */
 	public function checkduplicate($user)
 	{
 
@@ -168,7 +199,8 @@ class Users_model extends CI_Model
 			->where('username', $user);
 		$query = $this->db->get();
 		$user1 = $query->row_array();
-		//print_r($user1);
+		
+		//return true or false if user is in database
 		if ($user1 != '') {
 			return false;
 		} else {
@@ -176,18 +208,22 @@ class Users_model extends CI_Model
 		}
 	}
 
+	/**
+	 * add new account to data
+	 */
 	public function addaccount($name, $user, $password, $level)
 	{
 
 		$query = $this->db->query("INSERT INTO login (username,password) VALUES ('$user', '$password');");
 		$query = $this->db->query("INSERT INTO member (name,level) VALUES ('$name', '$level');");
-	
 	}
 
-
+	/**
+	 * delete user from table
+	 */
 	function dodelete($memberID)
 	{
-
+		//get user level
 		$this->db->select('level')
 			->from('member')
 			->where('memberID', $memberID);
@@ -196,6 +232,7 @@ class Users_model extends CI_Model
 
 		$result = $query->row_array();
 
+		//get number of rows of that nubmer level
 
 		$this->db->where('level =', $result['level']);
 
@@ -203,12 +240,15 @@ class Users_model extends CI_Model
 
 		$result2 = $query2->num_rows();
 
-	
 
-		if ( $result['level'] == 2 and $result2 == 1) {
+		//check if only 1 manager in table
+		if ($result['level'] == 2 and $result2 == 1) {
 
 			return true;
+			//if not 1 manager or employee delete from table
 		} else {
+
+			//delete from all table with that memberID
 			$sql = "DELETE pendingshift FROM pendingshift JOIN scheduler 
 			ON scheduler.scheduleID=pendingshift.scheduleID WHERE scheduler.memberID = ? ";
 			$this->db->query($sql, array($memberID));
@@ -219,15 +259,18 @@ class Users_model extends CI_Model
 			$this->db->query("DELETE FROM login where loginID = '$memberID';");
 			$this->db->query("DELETE FROM schedulerinfo where memberID = '$memberID';");
 			$this->db->query("DELETE FROM chatboxmessages where from_memberID = '$memberID' or to_memberID = '$memberID';");
-
 		}
 	}
 
+	/**
+	 * add reset password to data
+	 */
 	public function doresetpass($resetvalue)
 	{
-
+		//hash the password
 		$hashed_password = password_hash($resetvalue['temppass'], PASSWORD_DEFAULT);
 
+		//insert hash password to data
 		$data1 = array(
 			'password' => $hashed_password
 		);
@@ -235,6 +278,7 @@ class Users_model extends CI_Model
 		$this->db->where('loginID', $resetvalue["memberID"]);
 		$this->db->update('login', $data1);
 
+		//get the username for reset password
 		$this->db->select('username')
 			->from('login')
 			->where('loginID', $resetvalue["memberID"]);
@@ -247,10 +291,15 @@ class Users_model extends CI_Model
 
 	//---------------------------------------Forum Page page
 
+	/**
+	 * add new topic into database as well as new dicussion
+	 */
 	function doNewPost($topic, $discussion, $memberdata)
 	{
+		//insert into forumtopictable
 		$this->db->query("INSERT INTO forumtopic (topic) VALUES ( '$topic');");
 
+		//get the topic id
 		$this->db->select('topicID')
 			->from('forumtopic')
 			->order_by('topicID', 'DESC')
@@ -260,9 +309,13 @@ class Users_model extends CI_Model
 
 		$result = $query->result_array();
 		$topicid = $result[0]["topicID"];
+		//insert message with new topic id
 		$this->db->query("INSERT INTO forummessage (topicID,memberID,messageforum) VALUES ('$topicid','$memberdata','$discussion');");
 	}
 
+	/**
+	 * get all post topics
+	 */
 	public function loadposts()
 	{
 
@@ -278,6 +331,9 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
+	/**
+	 * get all discussion from forum topic selected
+	 */
 	function forumdetail($topicID)
 	{
 		$this->db->select('forumtopic.topic')
@@ -292,11 +348,18 @@ class Users_model extends CI_Model
 
 		return $query->result_array();
 	}
+
+	/**
+	 * add new discussion post into forum discussion
+	 */
 	function forumdetailadd($memberdata, $forumID, $message)
 	{
 		$this->db->query("INSERT INTO forummessage (topicID,memberID,messageforum) VALUES ('$forumID','$memberdata','$message');");
 	}
 
+	/**
+	 * search topic from user value
+	 */
 	public function dosearch($search)
 	{
 
@@ -313,6 +376,9 @@ class Users_model extends CI_Model
 	}
 	//---------------------------------------Analysis page		
 
+	/**
+	 * getmembers id
+	 */
 	public function getmembers()
 	{
 
@@ -329,28 +395,15 @@ class Users_model extends CI_Model
 
 
 
-	
-
-	public function loadanalysis($member)
-	{
-
-		$this->db->select('*')
-			->from('stat')
-			->where('memberID', $member);
 
 
-
-		$query = $this->db->get();
-
-		return $query->result_array();
-	}
 	//---------------------------------------schedule set up page	
-	
 
-	
-	
 
-	
+
+
+
+
 
 	//---------------------------------------schedule menu page	
 
@@ -370,29 +423,15 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
-	
+
 
 	//---------------------------------------schedule admin/mananger menu page	
 
-	
-	function loadopenschedule()
-	{
-		$this->db->select('scheduler.timeofday')
-			->select('scheduler.startdatetime')
-			->select('scheduler.enddatetime')
-			->select('openshift.openshiftID')
-			->from('scheduler')
-			->join('openshift', 'openshift.scheduleID = scheduler.scheduleID');
 
 
 
-		$query = $this->db->get();
 
-		return $query->result_array();
-	}
-	
 
-	
 
 	public function dopendname($pendID)
 	{
@@ -408,14 +447,19 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
-	
 
-	
+
+
 
 	//admscheduler setup
+
+	/**
+	 * add week shift to database
+	 */
 	public function addweek($item)
 	{
 
+		//insert start and end date for the week
 		$data = array(
 			'startdate' => $item['startdate'],
 			'enddate' => $item['enddate']
@@ -424,7 +468,7 @@ class Users_model extends CI_Model
 
 		$this->db->insert('newweek', $data);
 
-
+		// get the weekId for the new week
 		$this->db->select('weekID')
 			->from('newweek')
 			->order_by('weekID', 'DESC')
@@ -436,7 +480,7 @@ class Users_model extends CI_Model
 		$weekid = $result[0]["weekID"];
 
 
-
+		//add all into into builtshift table using week id
 		foreach ($item["allitem"] as $row) {
 			$data2 = array(
 				'start' => $row['start'],
@@ -452,6 +496,9 @@ class Users_model extends CI_Model
 		}
 	}
 
+	/**
+	 * check if there is a week of schedule in the data
+	 */
 	public function checkscheduleweek()
 	{
 
@@ -464,14 +511,16 @@ class Users_model extends CI_Model
 
 		$result = $query->result_array();
 
-
+		//check if any week is found then return true or false if empty or not
 		if (empty($result)) {
 			return false;
 		} else {
 			return true;
 		}
 	}
-
+	/**
+	 * add previous week employee and shifts into new week
+	 */
 	public function douselastweek($start, $end)
 	{
 		//get last week weekID
@@ -536,8 +585,8 @@ class Users_model extends CI_Model
 		$result2 = $query2->result_array();
 
 
-		
-		
+
+		//add previous week  into new week builtshift
 		foreach ($result1 as $row) {
 			$data2 = array(
 				'start' => $row['start'],
@@ -551,7 +600,6 @@ class Users_model extends CI_Model
 			);
 
 			$this->db->insert('builtshift', $data2);
-			
 		}
 
 		//get second value from builtshift
@@ -566,7 +614,10 @@ class Users_model extends CI_Model
 
 		$builtshiftID2 = $query8->result_array();
 
+		//get the parallel value to get new week builtshiftID
 		$count = $builtshiftID2[0]["builtshiftID"] - $builtshiftID1[0]["builtshiftID"];
+
+		//add same people into scheduler for new week
 		foreach ($result3 as $row) {
 			$data3 = array(
 				'memberID' => $row['memberID'],
@@ -582,6 +633,9 @@ class Users_model extends CI_Model
 		}
 	}
 
+	/**
+	 * get all weeks schedule
+	 */
 	public function loadweeks()
 	{
 
@@ -593,6 +647,10 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
+	/**
+	 * 
+	 * get all values of newweek and builtshift
+	 */
 	public function weekinfo($weekID)
 	{
 
@@ -602,7 +660,7 @@ class Users_model extends CI_Model
 			->where('newweek.weekID', $weekID);
 
 		$query = $this->db->get();
-		//print_r($query->result_array());
+
 		return $query->result_array();
 	}
 
@@ -625,9 +683,13 @@ class Users_model extends CI_Model
 		FROM member LEFT JOIN schedulerinfo ON member.memberID=schedulerinfo.memberID AND schedulerinfo.weekID =? WHERE member.level=0  GROUP BY member.name;');
 		return $this->db->query($sql, $weekID)->result_array();
 	}
+
+	/**
+	 * adding employee to a schedule shift
+	 */
 	public function doaddshift($data)
 	{
-		//add employee to scheduelrinfo
+		//add employee to scheduelerinfo
 		$data1 = array(
 			'memberID' => $data['member'],
 			'timeofday' => $data['day'],
@@ -654,37 +716,38 @@ class Users_model extends CI_Model
 		$startime = 0;
 		$endtime = 0;
 
-		if($result[0]["startampm"] == "am" && $result[0]["start"] == 12){
+		//get hours
+		if ($result[0]["startampm"] == "am" && $result[0]["start"] == 12) {
 			$starttime = 0;
-		}else if ($result[0]["startampm"] == "am"){
+		} else if ($result[0]["startampm"] == "am") {
 			$startime = $result[0]["start"];
-		}else if ($result[0]["startampm"] == "pm" && $result[0]["start"] == 12){
+		} else if ($result[0]["startampm"] == "pm" && $result[0]["start"] == 12) {
 			$startime = $result[0]["start"];
-		}else if($result[0]["startampm"] == "pm"){
+		} else if ($result[0]["startampm"] == "pm") {
 			$startime = $result[0]["start"] + 12;
 		}
 
-		if($result[0]["endampm"] == "am" && $result[0]["end"] == 12){
+		if ($result[0]["endampm"] == "am" && $result[0]["end"] == 12) {
 			$endtime = 0;
-		}else if ($result[0]["endampm"] == "am"){
+		} else if ($result[0]["endampm"] == "am") {
 			$endtime = $result[0]["end"];
-		}else if ($result[0]["endampm"] == "pm" && $result[0]["end"] == 12){
+		} else if ($result[0]["endampm"] == "pm" && $result[0]["end"] == 12) {
 			$endtime = $result[0]["end"];
-		}else if($result[0]["endampm"] == "pm"){
+		} else if ($result[0]["endampm"] == "pm") {
 			$endtime = $result[0]["end"] + 12;
 		}
 
 		$value1 = abs($startime - $endtime);
-		
+
 		$totalearn = 14.25 * $value1;
 		$value = $result[0]["scheduleinfoID"];
-		
 
+		//insert value into employee stats
 		$data1 = array(
 			'scheduleinfoID' => $value,
 			'pay' => $totalearn,
 			'hours' => $value1
-			
+
 		);
 
 		$this->db->insert('employeestat', $data1);
@@ -699,6 +762,7 @@ class Users_model extends CI_Model
 
 		return $query->result_array();
 	}
+
 	public function dofiltername($memberID)
 	{
 		$sql = ('SELECT member.name,GROUP_CONCAT(IF(schedulerinfo.timeofday = "1", schedulerinfo.shifttime, NULL)) as days
@@ -761,6 +825,9 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
+	/**
+	 * get employee for that week and day
+	 */
 	public function loademployeeinfo($weekID, $day)
 	{
 
@@ -769,6 +836,9 @@ class Users_model extends CI_Model
 		return $this->db->query($sql, array($weekID, $day))->result_array();
 	}
 
+	/**
+	 * get shift that are for that day and week
+	 */
 	public function weekinfoshift($weekID, $day)
 	{
 
@@ -783,6 +853,9 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
+	/**
+	 * get data for employee that are schedule
+	 */
 	public function loadscheduleemployee($weekID, $day)
 	{
 
@@ -791,6 +864,9 @@ class Users_model extends CI_Model
 		return $this->db->query($sql, array($weekID, $day))->result_array();
 	}
 
+	/**
+	 * get the current week start and end date
+	 */
 	public function weekdate($weekID)
 	{
 
@@ -799,28 +875,35 @@ class Users_model extends CI_Model
 			->where('weekID', $weekID);
 
 		$query = $this->db->get();
-		//print_r($query->result_array());
+		
 		return $query->result_array();
 	}
 
+	/**
+	 * delete employy from current schedule shift
+	 */
 	public function dodeleteshift($shiftID)
 	{
 
-
+		//remove employee schedule shift
 		$this->db->where('scheduleinfoID', $shiftID);
 		$this->db->delete('schedulerinfo');
 
+		//remove stat for that shift
 		$this->db->where('scheduleinfoID', $shiftID);
 		$this->db->delete('employeestat');
 
+		//remove any pending request from the shift
 		$this->db->where('scheduleinfoID', $shiftID);
 		$this->db->delete('pendingusershifts');
 	}
 
 
 
-	
 
+	/**
+	 * get the count of which shifts are available
+	 */
 	public function doshiftslot($weekID, $day)
 	{
 
@@ -829,6 +912,9 @@ class Users_model extends CI_Model
 		return $this->db->query($sql, array($weekID, $day))->result_array();
 	}
 
+	/**
+	 * get employee already schedule in shifts
+	 */
 	public function doshiftstable($weekID, $day)
 	{
 
@@ -839,9 +925,13 @@ class Users_model extends CI_Model
 		return $this->db->query($sql, array($weekID, $day))->result_array();
 	}
 	//employee shift
-	public function doloadmeployeeshift($memberdata,$weekID)
+
+	/**
+	 * get logged in employee shifts
+	 */
+	public function doloadmeployeeshift($memberdata, $weekID)
 	{
-		
+
 
 		$this->db->select('*')
 			->from('schedulerinfo')
@@ -854,7 +944,10 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
-	public function tableinfoemp($weekID,$memberID)
+	/**
+	 * info of employee schedule
+	 */
+	public function tableinfoemp($weekID, $memberID)
 	{
 		$sql = ('SELECT member.name,GROUP_CONCAT(IF(schedulerinfo.timeofday = "1", schedulerinfo.shifttime, NULL)) as days
 		,GROUP_CONCAT(IF(schedulerinfo.timeofday = "1", schedulerinfo.modtime, NULL)) as mdays
@@ -874,9 +967,12 @@ class Users_model extends CI_Model
 		return $this->db->query($sql, array($weekID, $memberID))->result_array();
 	}
 
+	/**
+	 * add data to pending shift
+	 */
 	public function dopendingUserShift($shiftID)
 	{
-
+		//get scheduleinfoID to check if shift is already pending
 		$this->db->select('scheduleinfoID')
 			->from('pendingusershifts')
 			->where('scheduleinfoID', $shiftID["shiftID"]);
@@ -886,9 +982,11 @@ class Users_model extends CI_Model
 
 		$result = $query->row_array();
 
+		//it found pending value return false
 		if (!empty($result)) {
 
 			return false;
+		//if pending not found add a pending to data
 		} else {
 
 			$data = array(
@@ -901,12 +999,15 @@ class Users_model extends CI_Model
 		}
 	}
 
+	/**
+	 * get open shift 
+	 */
 	public function loadavailshiftemp($weekID)
 	{
 
 
 		$this->db->select('*')
-			
+
 			->from('builtshift')
 			->join('openusershifts', 'openusershifts.builtshiftID = builtshift.builtshiftID')
 			->where('builtshift.weekID ', $weekID);
@@ -917,84 +1018,87 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
-	public function doacceptopenshift($openshiftID,$memberdata,$weekID)
+	/**
+	 * add user to open shift
+	 */
+	public function doacceptopenshift($openshiftID, $memberdata, $weekID)
 	{
-		
-		
 
-		
+
+
+
 		//get time to add to user shift
 		$this->db->select('*')
-			
+
 			->from('builtshift')
 			->join('openusershifts', 'openusershifts.builtshiftID = builtshift.builtshiftID')
 			->where('openusershifts.openshiftID ', $openshiftID);
 
-		
+
 		$query = $this->db->get();
 
 		$result = $query->result_array();
-		$time = $result[0]["start"].$result[0]["startampm"]."-".$result[0]["end"].$result[0]["endampm"];
-		
-		
+		$time = $result[0]["start"] . $result[0]["startampm"] . "-" . $result[0]["end"] . $result[0]["endampm"];
+
+
 		//check if shift is full
 		$sql = ('SELECT *,count(schedulerinfo.shifttime) as count
 		FROM builtshift LEFT JOIN schedulerinfo ON builtshift.builtshiftID=schedulerinfo.builtshiftID WHERE builtshift.weekID =? AND builtshift.timeofday=? AND builtshift.builtshiftID=? GROUP BY builtshift.builtshiftID ;');
-		$fullcheck = $this->db->query($sql, array($weekID, $result[0]["timeofday"],$result[0]["builtshiftID"]))->result_array();
+		$fullcheck = $this->db->query($sql, array($weekID, $result[0]["timeofday"], $result[0]["builtshiftID"]))->result_array();
 
 		$slotfull = $fullcheck[0]["amtpeople"] - $fullcheck[0]["count"];
-		//print_r($slotfull);
-		if($slotfull == 0 ){
-		$this->db->where('openshiftID', $openshiftID);
-		$this->db->delete('openusershifts');
+		
+		//check if shift is already filled
+		if ($slotfull == 0) {
+			$this->db->where('openshiftID', $openshiftID);
+			$this->db->delete('openusershifts');
 
 			return 1;
 		}
-		
+
 		//check if user is already schedule for that day
 		$this->db->select('*')
-			
-		->from('schedulerinfo')
-		->where('memberID', $memberdata)
-		->where('timeofday', $result[0]["timeofday"])
-		->where('weekID', $weekID);
 
-	
+			->from('schedulerinfo')
+			->where('memberID', $memberdata)
+			->where('timeofday', $result[0]["timeofday"])
+			->where('weekID', $weekID);
+
+
 		$query = $this->db->get();
 
 		$result1 = $query->result_array();
 
 		//add shift if not already schedule for that day
-		if(empty($result1)){
+		if (empty($result1)) {
 
-				$data = array(
-			'memberID' => $memberdata,
-			'weekID' => $weekID,
-			'timeofday' => $result[0]["timeofday"],
-			'shifttime' => $time,
-			'builtshiftID' => $result[0]["builtshiftID"],
-			
-		);
+			$data = array(
+				'memberID' => $memberdata,
+				'weekID' => $weekID,
+				'timeofday' => $result[0]["timeofday"],
+				'shifttime' => $time,
+				'builtshiftID' => $result[0]["builtshiftID"],
 
-		$this->db->insert('schedulerinfo', $data);
+			);
 
-		$this->db->where('openshiftID', $openshiftID);
-		$this->db->delete('openusershifts');
+			$this->db->insert('schedulerinfo', $data);
+
+			$this->db->where('openshiftID', $openshiftID);
+			$this->db->delete('openusershifts');
 
 			return 2;
-		}else{
+		} else {
 			//return 3 if already schedule for that day
 			return 3;
 		}
-		
-		
-		
-	
-
 	}
 
 
-		//adm pending shift shift
+
+	/**
+	 * data to loadweek
+	 * 
+	 */
 	public function loadweekpend()
 	{
 
@@ -1014,10 +1118,10 @@ class Users_model extends CI_Model
 		return $this->db->query($sql, array($weekID))->result_array();
 	}
 
-	function admpendingschedule($weekID,$day)
+	function admpendingschedule($weekID, $day)
 	{
 		$this->db->select('*')
-			
+
 			->from('schedulerinfo')
 			->join('pendingusershifts', 'pendingusershifts.scheduleinfoID = schedulerinfo.scheduleinfoID')
 			->join('member', 'member.memberID = schedulerinfo.memberID')
@@ -1041,6 +1145,9 @@ class Users_model extends CI_Model
 		return $this->db->query($sql, array($weekID, $day))->result_array();
 	}
 
+	/**
+	 * decline shift request from employee
+	 */
 	public function dopenddeclineshift($pendID)
 	{
 
@@ -1049,12 +1156,15 @@ class Users_model extends CI_Model
 		$this->db->delete('pendingusershifts');
 	}
 
+	/**
+	 * remove pending shift and add to open shift
+	 */
 	public function dopendacceptshift($pendID)
 	{
 
-
+		//get value to add and remove to open shift
 		$this->db->select('*')
-			
+
 			->from('schedulerinfo')
 			->join('pendingusershifts', 'pendingusershifts.scheduleinfoID = schedulerinfo.scheduleinfoID')
 			->where('pendingusershifts.pendingID ', $pendID);
@@ -1065,28 +1175,33 @@ class Users_model extends CI_Model
 		$result = $query->result_array();
 
 
-		
 
+		//insert pending shift as open shift
 		$data = array(
 			'builtshiftID' => $result[0]["builtshiftID"]
-			
+
 		);
 
 		$this->db->insert('openusershifts', $data);
-		
+
+		//delete from pending shift
 		$this->db->where('pendingID', $result[0]["pendingID"]);
 		$this->db->delete('pendingusershifts');
 
+		//remove employee from shift
 		$this->db->where('scheduleinfoID', $result[0]["scheduleinfoID"]);
 		$this->db->delete('schedulerinfo');
 	}
 
+	/**
+	 * get the data of all available shifts
+	 */
 	public function loadavailshift($weekID, $day)
 	{
 
 
 		$this->db->select('*')
-			
+
 			->from('builtshift')
 			->join('openusershifts', 'openusershifts.builtshiftID = builtshift.builtshiftID')
 			->where('builtshift.weekID ', $weekID)
@@ -1098,22 +1213,28 @@ class Users_model extends CI_Model
 		return $query->result_array();
 	}
 
+	/**
+	 * delete the open shift
+	 */
 	public function dodeleteopenshift($openshiftID)
 	{
 
 
-		
 
+		//delete openshift using id
 		$this->db->where('openshiftID', $openshiftID["openshiftID"]);
 		$this->db->delete('openusershifts');
 	}
 
 	//adm accessing employeee stats
 
+	/**
+	 * get employee stat for the week
+	 */
 	public function getEmployeeestat($memberID, $weekID)
 	{
 		$this->db->select('*')
-			
+
 			->from('schedulerinfo')
 			->join('employeestat', 'employeestat.scheduleinfoID = schedulerinfo.scheduleinfoID')
 			->where('schedulerinfo.weekID ', $weekID)
@@ -1124,13 +1245,12 @@ class Users_model extends CI_Model
 		$query = $this->db->get();
 
 		return $query->result_array();
-
-
-		
-
 	}
 
-	public function UpdateEmployeeestat($memberID, $weekID, $late, $pay, $Hours,$scheduleinfoID)
+	/**
+	 * update stat for employee
+	 */
+	public function UpdateEmployeeestat($memberID, $weekID, $late, $pay, $Hours, $scheduleinfoID)
 	{
 
 
@@ -1138,13 +1258,13 @@ class Users_model extends CI_Model
 			'latetoshift' => $late,
 			'pay' => $pay,
 			'hours' => $Hours
-	);
-	
-	$this->db->where('scheduleinfoID', $scheduleinfoID);
-	$this->db->update('employeestat', $data);
+		);
+
+		$this->db->where('scheduleinfoID', $scheduleinfoID);
+		$this->db->update('employeestat', $data);
 
 		$this->db->select('*')
-			
+
 			->from('schedulerinfo')
 			->join('employeestat', 'employeestat.scheduleinfoID = schedulerinfo.scheduleinfoID')
 			->where('schedulerinfo.weekID ', $weekID)
@@ -1155,17 +1275,17 @@ class Users_model extends CI_Model
 		$query = $this->db->get();
 
 		return $query->result_array();
-
-
-		
-
 	}
 	//profile page
+
+	/**
+	 * get value for logged in suer profile
+	 */
 	public function loadprofile($memberID)
 	{
 
 		$this->db->select('*')
-			
+
 			->from('login')
 			->join('member', 'member.memberID = login.loginID')
 			->where('login.loginID ', $memberID);
@@ -1174,45 +1294,37 @@ class Users_model extends CI_Model
 		$query = $this->db->get();
 
 		return $query->result_array();
-
-
-		
-
 	}
 
-	public function doupdateprofile($memberID,$user)
+	/**
+	 * update user username with new username
+	 */
+	public function doupdateprofile($memberID, $user)
 	{
 
 		$data1 = array(
 			'username' => $user,
-			
-			
+
+
 		);
 
 		$this->db->where('loginID', $memberID);
 		$this->db->update('login', $data1);
-
-
-		
-
 	}
 
-	public function doupdatepassword($memberID,$password)
+	/**
+	 * update current user password with new enter password
+	 */
+	public function doupdatepassword($memberID, $password)
 	{
 
 		$data1 = array(
 			'password' => $password
-			
-			
+
+
 		);
 
 		$this->db->where('loginID', $memberID);
 		$this->db->update('login', $data1);
-
-
-		
-
 	}
-
-	
 }

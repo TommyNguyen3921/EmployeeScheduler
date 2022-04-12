@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Createacc extends CI_Controller {
+class Createacc extends CI_Controller
+{
 
   var $TPL;
 
@@ -13,106 +14,155 @@ class Createacc extends CI_Controller {
     $this->form_validation->set_rules('user', 'Username', 'required');
     $this->form_validation->set_rules('password', 'Password', 'required');
     $this->form_validation->set_rules('name', 'Name', 'required');
-   
   }
 
+  /**
+   * display create account page
+   */
   public function index()
   {
 
     $this->load->library('session');
-			$data2['test'] = $this->session->userdata('access');
+    //get value for name
+    $data2['test'] = $this->session->userdata('access');
 
-            $data2['accounts'] = $this->users_model->loadaccounts();
+    //load all accounts
+    $data2['accounts'] = $this->users_model->loadaccounts();
 
-            $data2['error'] = false;
-            $data2['success'] = false;
-            $data2['deletecheck'] = false;
-			//print_r($data2);
-    $this->template->show('createacc',$data2);
+    //display error message false
+    $data2['error'] = false;
+
+    //display success message false
+    $data2['success'] = false;
+
+    //display delete message false
+    $data2['deletecheck'] = false;
+    
+    //show create account apge
+    $this->template->show('createacc', $data2);
   }
 
-  
 
-public function create(){
-  $check =true;
-  $user = $_POST['user'];
-  
-  $check  = $this->users_model->checkduplicate($user);
-
-  // perform form validation, if it fails, report failure
-
-
-   if ($this->form_validation->run() == FALSE){
-        
-    $this->index();
-   
-  }else if ($check == false)
+  /**
+   * create new account
+   */
+  public function create()
   {
-  // set a template variable to report validation failure
-   
+    $check = true;
+
+    //get username from user
+    $user = $_POST['user'];
+
+    //check if user is already used
+    $check  = $this->users_model->checkduplicate($user);
+
+    // perform form validation, if it fails, report failure
+
+
+    if ($this->form_validation->run() == FALSE) {
+      //show index create account page
+      $this->index();
+      //if username already exist
+    } else if ($check == false) {
+      // set a template variable to report validation failure
+
+      $this->load->library('session');
+      //get value for name
+      $data2['test'] = $this->session->userdata('access');
+
+      //get accounts
+      $data2['accounts'] = $this->users_model->loadaccounts();
+
+      //dont display success or deletecheck
+      $data2['success'] = false;
+      $data2['deletecheck'] = false;
+
+      //show error
+      $data2['error'] = true;
+      //show index create account page
+      $this->template->show('createacc', $data2);
+
+      //add account to database
+    } else {
+      $name = $_POST['name'];
+      $user = $_POST['user'];
+      $password = $_POST['password'];
+      $level = $_POST['level'];
+
+      //hash password
+      $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+      //add new account into data
+      $this->users_model->addaccount($name, $user, $hashed_password, $level);
+
+      
+
+      $this->load->library('session');
+
+      //get value for name
+      $data2['test'] = $this->session->userdata('access');
+
+      //load all the accounts
+      $data2['accounts'] = $this->users_model->loadaccounts();
+      
+      //dont display error
+      $data2['error'] = false;
+
+      //display successfully added
+      $data2['success'] = true;
+
+      //dont display deletecheck
+      $data2['deletecheck'] = false;
+      
+      //display create account page
+      $this->template->show('createacc', $data2);
+    }
+  }
+
+  /**
+   * delete user from table
+   */
+  public function delete($memberID)
+  {
+
+    //method to delete user
+    $delete = $this->users_model->dodelete($memberID);
+
     $this->load->library('session');
-			$data2['test'] = $this->session->userdata('access');
+    //get value for name
+    $data2['test'] = $this->session->userdata('access');
 
-            $data2['accounts'] = $this->users_model->loadaccounts();
-            $data2['success'] = false;
-            $data2['deletecheck'] = false;
-            $data2['error'] = true;
-			//print_r($data2);
-    $this->template->show('createacc',$data2);
-  }else{
-    $name = $_POST['name'];
-        $user = $_POST['user'];
-    $password = $_POST['password'];
-    $level = $_POST['level'];
- 
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    //loadaccounts
+    $data2['accounts'] = $this->users_model->loadaccounts();
 
-    $this->users_model->addaccount($name,$user,$hashed_password,$level);
-        
-	//print_r($level);
+    //dont show error or success
+    $data2['error'] = false;
+    $data2['success'] = false;
+
+    //check if table value is deleted
+    if ($delete == true) {
+      //display if 1 manager and didnt delete
+      $data2['deletecheck'] = true;
+    } else {
+      $data2['deletecheck'] = false;
+    }
     
-  $this->load->library('session');
-  $data2['test'] = $this->session->userdata('access');
+    //display create account page 
+    $this->template->show('createacc', $data2);
+  }
 
-        $data2['accounts'] = $this->users_model->loadaccounts();
+  /**
+   * reseting the password for user account
+   */
+  public function resetpass()
+  {
 
-        $data2['error'] = false;
-        $data2['success'] = true;
-        $data2['deletecheck'] = false;
-  //print_r($data2);
-$this->template->show('createacc',$data2);
-}
+    //get password value
+    $resetvalue = $this->input->post();
 
-}
+    //add reset password to data
+    $data = $this->users_model->doresetpass($resetvalue);
 
-public function delete($memberID)
-{
-  
-  $delete = $this->users_model->dodelete($memberID);
-
-  $this->load->library('session');
-  $data2['test'] = $this->session->userdata('access');
-
-        $data2['accounts'] = $this->users_model->loadaccounts();
-
-        $data2['error'] = false;
-        $data2['success'] = false;
-        if ($delete == true){
-        $data2['deletecheck'] = true;
-      }else{
-        $data2['deletecheck'] = false;
-      }
-  //print_r($data2);
-$this->template->show('createacc',$data2);
-}
-
-public function resetpass(){
-   
-  $resetvalue = $this->input->post();
-
-  // get data
-  $data = $this->users_model->doresetpass($resetvalue);
- 
-  echo json_encode($data);
-}
+    echo json_encode($data);
+  }
 }

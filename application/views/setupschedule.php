@@ -15,7 +15,7 @@
       </button>
     <?php } else { ?>
       <button class="btn btn-success newweekbtn" id="alertchoice">
-        ADD NEW WEEK2
+        ADD NEW WEEK
       </button>
     <?php } ?>
 
@@ -58,26 +58,42 @@
 <script>
   $(document).ready(function() {
 
+    /**
+     *allow input to be datepicker 
+     */
     $(function() {
       $("#startdatepicker").datepicker();
       $("#Enddatepicker").datepicker();
     });
 
+    /**
+     *after dat is submitted show popup to use previous schedule week or error message if date have not been selected 
+     */
     $("#alertchoice").click(function(event) {
 
+      //check if data value are empty
       if ($('#startdatepicker').val() == "" && ($('#Enddatepicker').val() == "")) {
+        //pop up to say fill form
         $('#fillform').modal('show');
       } else {
+        //pop up to ask to use previous schedule week
         $('#Modalalert').modal('show');
       }
       event.preventDefault();
 
     });
+
+    /**
+     *no button to not use scheduler previous week on pop up 
+     */
     $('.submitdate').on('click', function() {
 
       $("#newweek").submit();
     });
 
+    /**
+     *yes button on pop to use previous week schedule 
+     */
     $('.submitolddate').on('click', function() {
       var start = $("#startdatepicker").val();
       var end = $("#Enddatepicker").val();

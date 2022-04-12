@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Empreport extends CI_Controller {
+class Empreport extends CI_Controller
+{
 
   var $TPL;
 
@@ -13,34 +14,53 @@ class Empreport extends CI_Controller {
 
     $this->form_validation->set_rules('topic', 'Topic', 'required');
     $this->form_validation->set_rules('description', 'Description', 'required');
-   
   }
 
+  /**
+   * display employeee report page
+   */
   public function index()
   {
 
     $this->load->library('session');
-			$data2['test'] = $this->session->userdata('access');
-      $data2["success"] = false;
-    $this->template->show('empreport',$data2);
+    //get name value
+    $data2['test'] = $this->session->userdata('access');
+
+    //display success message false
+    $data2["success"] = false;
+    //load employee report page
+    $this->template->show('empreport', $data2);
   }
 
-  public function report(){
-        $user = $_POST['user'];
-    		$topic = $_POST['topic'];
-        $description = $_POST['description'];
+  /**
+   * get user report
+   */
+  public function report()
+  {
+    //get value from user
+    $user = $_POST['user'];
+    $topic = $_POST['topic'];
+    $description = $_POST['description'];
 
-        if ($this->form_validation->run() == FALSE){
-        
-          $this->index();
-         
-        }else{
-     $memberdata = $this->session->userdata('memberIDE');
-    		$data = $this->users_model->Sendreport($memberdata, $topic,$description);
+    //check form validation if they miss an input
+    if ($this->form_validation->run() == FALSE) {
+      //reload page if they did
+      $this->index();
+    } else {
 
-        $data2['test'] = $this->session->userdata('access');
-        $data2["success"] = true;
-        $this->template->show('empreport',$data2);
-        }
+      //get memberID
+      $memberdata = $this->session->userdata('memberIDE');
+      //insert report data to database
+      $data = $this->users_model->Sendreport($memberdata, $topic, $description);
+
+      //get name value
+      $data2['test'] = $this->session->userdata('access');
+
+      //display success when report is added
+      $data2["success"] = true;
+
+      //load employee report page
+      $this->template->show('empreport', $data2);
+    }
   }
 }

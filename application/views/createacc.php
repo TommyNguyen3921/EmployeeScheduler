@@ -62,7 +62,7 @@
 
       <td><?= $row['name'] ?></td>
       <td><?= $row['username'] ?></td>
-      
+
       <?php if ($row['level'] == 0) { ?>
         <td>Employee</td>
       <?php } else { ?>
@@ -88,7 +88,9 @@
 
 
 
-
+    /**
+     *filter on account table to get certain user 
+     */
     $("#myInput").on("keyup", function() {
       var value = $(this).val().toLowerCase();
       $(".filterbox").filter(function() {
@@ -96,44 +98,52 @@
       });
     });
 
-
+    /**
+     *request to generate random temporary password 
+     */
     $(function() {
       $(document).on("click", '#request', function() {
-        
+
         event.preventDefault();
 
-        
 
-        
-          var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-          var passwordLength = 6;
-          var password = "";
-          for (var i = 0; i <= passwordLength; i++) {
-            var randomNumber = Math.floor(Math.random() * chars.length);
-            password += chars.substring(randomNumber, randomNumber + 1);
-          }
-          $("#password").val(password);
-          
+
+        //generate temp password
+        var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        var passwordLength = 6;
+        var password = "";
+        for (var i = 0; i <= passwordLength; i++) {
+          var randomNumber = Math.floor(Math.random() * chars.length);
+          password += chars.substring(randomNumber, randomNumber + 1);
+        }
+        //add temp password to input
+        $("#password").val(password);
+
 
       });
     });
 
+    /**
+     *reset selected user account password with a temporary password 
+     */
     $(function() {
       $(document).on("click", '#reset', function() {
+        //get memberID for person to reset password for
         var memberID = $(this).val();
         event.preventDefault();
 
+        //generate temp password
         var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-          var passwordLength = 6;
-          var password = "";
-          for (var i = 0; i <= passwordLength; i++) {
-            var randomNumber = Math.floor(Math.random() * chars.length);
-            password += chars.substring(randomNumber, randomNumber + 1);
-          }
+        var passwordLength = 6;
+        var password = "";
+        for (var i = 0; i <= passwordLength; i++) {
+          var randomNumber = Math.floor(Math.random() * chars.length);
+          password += chars.substring(randomNumber, randomNumber + 1);
+        }
 
-        
-        
 
+
+        //ajax to update user account with temp password
         $.ajax({
           url: '<?php echo base_url(); ?>index.php/Createacc/resetpass',
           method: 'post',
@@ -143,13 +153,17 @@
           },
           dataType: 'json',
           success: function(response) {
-            $( "#personname" ).html("<b>For user:</b> "+response[0].username);
-            $( "#resetpass" ).html("<b>Temporary Password:</b> "+password);
+            //get person name
+            $("#personname").html("<b>For user:</b> " + response[0].username);
+            //get temp password value
+            $("#resetpass").html("<b>Temporary Password:</b> " + password);
+
+            //display in pop up
             $('#Modalsent').modal('show')
-            
+
           }
         });
-          
+
 
       });
     });
@@ -163,14 +177,14 @@
 <div class="modal fade" id="Modalsent" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      
+
       <div class="modal-body">
-      <div id="personname"></div>
+        <div id="personname"></div>
         <div id="resetpass"></div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-       
+
       </div>
     </div>
   </div>

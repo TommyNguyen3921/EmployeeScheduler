@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Profile extends CI_Controller {
+class Profile extends CI_Controller
+{
 
   var $TPL;
 
@@ -10,87 +11,120 @@ class Profile extends CI_Controller {
     parent::__construct();
     $this->load->helper('url');
     $this->load->model('users_model');
-    
-   
   }
 
+  /**
+   * display forum page
+   */
   public function index()
   {
 
     $this->load->library('session');
-	$data2['test'] = $this->session->userdata('access');
+
+    //get value for name
+    $data2['test'] = $this->session->userdata('access');
+
+    //get memberID
     $memberdata = $this->session->userdata('memberIDE');
+
+    //get profile value
     $data2['memberinfo'] = $this->users_model->loadprofile($memberdata);
-    
-    
+
+    //display success message is false
     $data2["success"] = false;
-    $this->template->show('profile',$data2);
+
+    //display profile page
+    $this->template->show('profile', $data2);
   }
 
+
+  /**
+   * update the logged in user username
+   */
   public function updateprofile()
   {
     $this->form_validation->set_rules('username', 'Username', 'required');
-  
+
     $this->form_validation->set_rules('name', 'Name', 'required');
 
-    if ($this->form_validation->run() == FALSE){
-        
+    //check if all validation reuirement is met if not return redirect to profile page
+    if ($this->form_validation->run() == FALSE) {
+
       $this->index();
-     
-    }else{
+      //update profile page if validation is met
+    } else {
 
 
-    $this->load->library('session');
-	$data2['test'] = $this->session->userdata('access');
-    $memberdata = $this->session->userdata('memberIDE');
+      $this->load->library('session');
 
-    
-    $user = $_POST['username'];
-   
-    
-    
-    
-   $this->users_model->doupdateprofile($memberdata,$user);
+      //get name value
+      $data2['test'] = $this->session->userdata('access');
 
-    $data2['memberinfo'] = $this->users_model->loadprofile($memberdata);
-   
-    $data2["success"] = true;
-    $this->template->show('profile',$data2);
+      //get memberID
+      $memberdata = $this->session->userdata('memberIDE');
+
+
+      //get user new username
+      $user = $_POST['username'];
+
+
+
+      //method to update profile
+      $this->users_model->doupdateprofile($memberdata, $user);
+
+      //load logged in user profile
+      $data2['memberinfo'] = $this->users_model->loadprofile($memberdata);
+
+      //display succes for update
+      $data2["success"] = true;
+
+      //redirect to profile page
+      $this->template->show('profile', $data2);
     }
   }
-  
 
 
+/**
+ * update the user password
+ */
   public function updatepassword()
   {
-    
+
     $this->form_validation->set_rules('password', 'password', 'required|min_length[6]|max_length[12]');
-    if ($this->form_validation->run() == FALSE){
-        
+    //check if all validation requirement is met redirect to page if it does not with error message
+    if ($this->form_validation->run() == FALSE) {
+
       $this->index();
-     
-    }else{
+      //if requirement is met upate apssword
+    } else {
 
 
-    $this->load->library('session');
-	$data2['test'] = $this->session->userdata('access');
-    $memberdata = $this->session->userdata('memberIDE');
+      $this->load->library('session');
 
-    
-    $pass = $_POST['password'];
-   
-    $hashed_password = password_hash($pass, PASSWORD_DEFAULT);
-    
-    $this->users_model->doupdatepassword($memberdata,$hashed_password);
+      //get name value
+      $data2['test'] = $this->session->userdata('access');
 
-   
+      //get memberID
+      $memberdata = $this->session->userdata('memberIDE');
 
-    $data2['memberinfo'] = $this->users_model->loadprofile($memberdata);
-   
-    $data2["success"] = true;
-    $this->template->show('profile',$data2);
+      //get new password value
+      $pass = $_POST['password'];
+
+      //hash password
+      $hashed_password = password_hash($pass, PASSWORD_DEFAULT);
+
+      //method to update password
+      $this->users_model->doupdatepassword($memberdata, $hashed_password);
+
+
+      //get user profile
+      $data2['memberinfo'] = $this->users_model->loadprofile($memberdata);
+
+      //display sucess message
+      $data2["success"] = true;
+
+      //redirect to profile page
+      $this->template->show('profile', $data2);
     }
   }
-
-
 }

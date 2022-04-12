@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Forum extends CI_Controller {
+class Forum extends CI_Controller
+{
 
   var $TPL;
 
@@ -15,106 +16,154 @@ class Forum extends CI_Controller {
     $this->form_validation->set_rules('discussion', 'Discussion', 'required');
   }
 
+  /**
+   * display forum page
+   */
   public function index()
   {
 
     $this->load->library('session');
-			$data2['test'] = $this->session->userdata('access');
+    //get value name
+    $data2['test'] = $this->session->userdata('access');
 
-      $data2['posts'] = $this->users_model->loadposts();
 
-     
-			//print_r($data2);
-    $this->template->show('forum',$data2);
+    //get all posts
+    $data2['posts'] = $this->users_model->loadposts();
+
+
+    //display forum page
+    $this->template->show('forum', $data2);
   }
 
+  /**
+   * direct to add forum
+   */
   public function addpost()
   {
 
     $this->load->library('session');
-			$data2['test'] = $this->session->userdata('access');
 
-          
-      
-            
-			//print_r($data2['test'][0]["memberID"]);
-    $this->template->show('addpost',$data2);
+    //get name value
+    $data2['test'] = $this->session->userdata('access');
+
+
+
+
+    //go to page to add another post
+    $this->template->show('addpost', $data2);
   }
 
+  /**
+   * get new post and add to data
+   */
   public function submitpost()
   {
-    if ($this->form_validation->run() == FALSE){
-        
+    //check if form is filled if not redirect to same page with error message
+    if ($this->form_validation->run() == FALSE) {
+
       $this->load->library('session');
-			$data2['test'] = $this->session->userdata('access');
+      $data2['test'] = $this->session->userdata('access');
 
-          
+
+
+
+      //dispay same page again
+      $this->template->show('addpost', $data2);
+      //add new forum topic to data if filled proeprly
+    } else {
+      $this->load->library('session');
+
+      //get user name
+      $data2['test'] = $this->session->userdata('access');
+
+      //get post value
+      $topic = $_POST['topic'];
+      $discussion = $_POST['discussion'];
+
+      //get memberID
+      $memberdata = $this->session->userdata('memberIDE');
       
-            
-			//print_r($data2['test'][0]["memberID"]);
-    $this->template->show('addpost',$data2);
-     
-    }else{
-    $this->load->library('session');
-			$data2['test'] = $this->session->userdata('access');
+      //method to add value to database
+      $this->users_model->doNewPost($topic, $discussion, $memberdata);
 
-          
-            $topic = $_POST['topic'];
-    		$discussion = $_POST['discussion'];
-           
-            
-     $memberdata = $this->session->userdata('memberIDE');
-     //print_r($memberdata);
-    		$this->users_model->doNewPost($topic, $discussion,$memberdata);
-            
-			
-    //$this->template->show('addpost',$data2);
-    $this->index();
+
+      //go index beginning of forum apge
+      $this->index();
     }
   }
+
+  /**
+   * see discussion for clicked forum topic
+   */
   public function foruminfo($topicID)
   {
 
     $this->load->library('session');
-			$data2['test'] = $this->session->userdata('access');
+    //get name value
+    $data2['test'] = $this->session->userdata('access');
 
-      
-     
-            
-     $data2['foruminfo'] = $this->users_model->forumdetail($topicID);
 
-     $this->session->set_userdata('forum',$topicID);
 
-     $test = $this->session->userdata('forum');
-     //print_r($data2);
-    $this->template->show('foruminfo',$data2);
+    //get forum details
+    $data2['foruminfo'] = $this->users_model->forumdetail($topicID);
+
+    //store topic id in session
+    $this->session->set_userdata('forum', $topicID);
+
+    $test = $this->session->userdata('forum');
+    
+    //go to forum info
+    $this->template->show('foruminfo', $data2);
   }
 
+  /**
+   * add new message for forum discussion into database
+   */
   public function addmessage()
   {
 
     $this->load->library('session');
-			$data2['test'] = $this->session->userdata('access');
-      $message = $_POST['message'];
 
-      $forumID = $this->session->userdata('forum');
-      $memberdata = $this->session->userdata('memberIDE');
-      $this->users_model->forumdetailadd($memberdata,$forumID,$message);
-      $data2['foruminfo'] = $this->users_model->forumdetail($forumID);
-      
-    $this->template->show('foruminfo',$data2);
+    //get name value
+    $data2['test'] = $this->session->userdata('access');
+
+    //get user message
+    $message = $_POST['message'];
+
+    //get current forumid
+    $forumID = $this->session->userdata('forum');
+
+    //get memberID
+    $memberdata = $this->session->userdata('memberIDE');
+
+    //add new forum message into discussion
+    $this->users_model->forumdetailadd($memberdata, $forumID, $message);
+
+    //get all forumdetail from discussion
+    $data2['foruminfo'] = $this->users_model->forumdetail($forumID);
+
+    //redirect to the forum info page
+    $this->template->show('foruminfo', $data2);
   }
+
+  /**
+   * search for topic user entered
+   */
   public function search()
   {
 
     $this->load->library('session');
-			$data2['test'] = $this->session->userdata('access');
-      $search = $_POST['search'];
 
-      
-      $data2['posts'] = $this->users_model->dosearch($search);
-     //print_r($data2['posts']);
+    //get name value
+    $data2['test'] = $this->session->userdata('access');
+
+    //get search value
+    $search = $_POST['search'];
+
+
+    $data2['posts'] = $this->users_model->dosearch($search);
     
-    $this->template->show('forum',$data2);
+    //redirect to forum page
+    $this->template->show('forum', $data2);
   }
 }

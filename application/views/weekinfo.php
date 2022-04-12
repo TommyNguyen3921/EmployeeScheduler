@@ -1,10 +1,8 @@
-
-
-<h2 >Set up Schedule</h2>
+<h2>Set up Schedule</h2>
 
 <h1 class=" weekdays"><b>Week Start Date:</b> <?= $weekinfo[0]['startdate'] ?> <b>Week End Date:</b> <?= $weekinfo[0]['enddate'] ?></h1>
 <ul class="nav navbar-light bg-light justify-content-center">
-<li class="nav-item">
+  <li class="nav-item">
     <a class="nav-link " href=" <?= base_url() ?>index.php?/Setupschedule/moreinfo/<?= $weekID ?>">default</a>
   </li>
   <li class="nav-item">
@@ -17,16 +15,16 @@
     <a class="nav-link" href=" <?= base_url() ?>index.php?/Setupschedule/dayinfo/<?= $weekID ?>/3">Tuesday</a>
   </li>
   <li class="nav-item">
-  <a class="nav-link" href=" <?= base_url() ?>index.php?/Setupschedule/dayinfo/<?= $weekID ?>/4">Wednesday</a>
+    <a class="nav-link" href=" <?= base_url() ?>index.php?/Setupschedule/dayinfo/<?= $weekID ?>/4">Wednesday</a>
   </li>
   <li class="nav-item">
-  <a class="nav-link" href=" <?= base_url() ?>index.php?/Setupschedule/dayinfo/<?= $weekID ?>/5">Thursday</a>
+    <a class="nav-link" href=" <?= base_url() ?>index.php?/Setupschedule/dayinfo/<?= $weekID ?>/5">Thursday</a>
   </li>
   <li class="nav-item">
-  <a class="nav-link" href=" <?= base_url() ?>index.php?/Setupschedule/dayinfo/<?= $weekID ?>/6">Friday</a>
+    <a class="nav-link" href=" <?= base_url() ?>index.php?/Setupschedule/dayinfo/<?= $weekID ?>/6">Friday</a>
   </li>
   <li class="nav-item">
-  <a class="nav-link" href=" <?= base_url() ?>index.php?/Setupschedule/dayinfo/<?= $weekID ?>/7">Saturday</a>
+    <a class="nav-link" href=" <?= base_url() ?>index.php?/Setupschedule/dayinfo/<?= $weekID ?>/7">Saturday</a>
   </li>
 </ul>
 
@@ -55,63 +53,63 @@
 
 
 
-  <?php foreach ($tableinfo as $row) { ?>
-    <tr>
+    <?php foreach ($tableinfo as $row) { ?>
+      <tr>
 
 
-      <td><?= $row['name'] ?></td>
+        <td><?= $row['name'] ?></td>
 
-      <?php if ($row['days']) { ?>
-        <td><?= $row['days'] ?> <br/> <?php if($row['mdays'] != "") { ?> <b class="red"> (Changed to <?= $row['mdays'] ?>)</b> <?php } ?></td>
+        <?php if ($row['days']) { ?>
+          <td><?= $row['days'] ?> <br /> <?php if ($row['mdays'] != "") { ?> <b class="red"> (Changed to <?= $row['mdays'] ?>)</b> <?php } ?></td>
 
-      <?php } else { ?>
-        <td>OFF</td>
-      <?php } ?>
+        <?php } else { ?>
+          <td>OFF</td>
+        <?php } ?>
 
-      <?php if ($row['days1']) { ?>
-        <td><?= $row['days1'] ?> <br/> <?php if($row['mdays1'] != "") { ?> <b class="red"> (Changed to <?= $row['mdays1'] ?>)</b> <?php } ?> </td>
-      <?php } else { ?>
-        <td>OFF</td>
-      <?php } ?>
+        <?php if ($row['days1']) { ?>
+          <td><?= $row['days1'] ?> <br /> <?php if ($row['mdays1'] != "") { ?> <b class="red"> (Changed to <?= $row['mdays1'] ?>)</b> <?php } ?> </td>
+        <?php } else { ?>
+          <td>OFF</td>
+        <?php } ?>
 
-      <?php if ($row['days2']) { ?>
-        <td><?= $row['days2'] ?> <br/> <?php if($row['mdays2'] != "") { ?> <b class="red"> (Changed to <?= $row['mdays2'] ?>)</b> <?php } ?></td>
-      <?php } else { ?>
-        <td>OFF</td>
-      <?php } ?>
+        <?php if ($row['days2']) { ?>
+          <td><?= $row['days2'] ?> <br /> <?php if ($row['mdays2'] != "") { ?> <b class="red"> (Changed to <?= $row['mdays2'] ?>)</b> <?php } ?></td>
+        <?php } else { ?>
+          <td>OFF</td>
+        <?php } ?>
 
-      <?php if ($row['days3']) { ?>
-        <td><?= $row['days3'] ?> <br/> <?php if($row['mdays3'] != "") { ?> <b class="red"> (Changed to <?= $row['mdays3'] ?>)</b> <?php } ?></td>
-      <?php } else { ?>
-        <td>OFF</td>
-      <?php } ?>
+        <?php if ($row['days3']) { ?>
+          <td><?= $row['days3'] ?> <br /> <?php if ($row['mdays3'] != "") { ?> <b class="red"> (Changed to <?= $row['mdays3'] ?>)</b> <?php } ?></td>
+        <?php } else { ?>
+          <td>OFF</td>
+        <?php } ?>
 
-      <?php if ($row['days4']) { ?>
-        <td><?= $row['days4'] ?> <br/> <?php if($row['mdays4'] != "") { ?> <b class="red"> (Changed to <?= $row['mdays4'] ?>)</b> <?php } ?></td>
-      <?php } else { ?>
-        <td>OFF</td>
-      <?php } ?>
+        <?php if ($row['days4']) { ?>
+          <td><?= $row['days4'] ?> <br /> <?php if ($row['mdays4'] != "") { ?> <b class="red"> (Changed to <?= $row['mdays4'] ?>)</b> <?php } ?></td>
+        <?php } else { ?>
+          <td>OFF</td>
+        <?php } ?>
 
-      <?php if ($row['days5']) { ?>
-        <td><?= $row['days5'] ?> <br/> <?php if($row['mdays5'] != "") { ?> <b class="red"> (Changed to <?= $row['mdays5'] ?>)</b> <?php } ?></td>
-      <?php } else { ?>
-        <td>OFF</td>
-      <?php } ?>
+        <?php if ($row['days5']) { ?>
+          <td><?= $row['days5'] ?> <br /> <?php if ($row['mdays5'] != "") { ?> <b class="red"> (Changed to <?= $row['mdays5'] ?>)</b> <?php } ?></td>
+        <?php } else { ?>
+          <td>OFF</td>
+        <?php } ?>
 
-      <?php if ($row['days6']) { ?>
-        <td><?= $row['days6'] ?> <br/> <?php if($row['mdays6'] != "") { ?> <b class="red"> (Changed to <?= $row['mdays6'] ?>)</b> <?php } ?> </td>
-      <?php } else { ?>
-        <td>OFF</td>
-      <?php } ?>
-
-
-
+        <?php if ($row['days6']) { ?>
+          <td><?= $row['days6'] ?> <br /> <?php if ($row['mdays6'] != "") { ?> <b class="red"> (Changed to <?= $row['mdays6'] ?>)</b> <?php } ?> </td>
+        <?php } else { ?>
+          <td>OFF</td>
+        <?php } ?>
 
 
 
-    </tr>
-   
-  <?php } ?>
+
+
+
+      </tr>
+
+    <?php } ?>
 
   </tbody>
 
@@ -125,13 +123,16 @@
 <script type='text/javascript'>
   $(document).ready(function() {
 
+    /**
+     *filter schedule employee table 
+     */
     $("#myInput").on("keyup", function() {
       var value = $(this).val().toLowerCase();
       $("#tbody").filter(function() {
         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
       });
     });
-    
+
 
   });
 </script>

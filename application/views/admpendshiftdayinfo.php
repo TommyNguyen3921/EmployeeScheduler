@@ -1,7 +1,3 @@
-
-
-
-
 <?php if ($day == 1) { ?>
     <h1>Sunday</h1>
 <?php } else if ($day == 2) { ?>
@@ -28,24 +24,24 @@
             <h1>Available Employees</h1>
 
             <input id="Inputshiftslot" type="text" placeholder="Search..">
-            <table id="shiftvalue" >
+            <table id="shiftvalue">
 
-<th>Shift</th>
-<th>Shift Filled</th>
+                <th>Shift</th>
+                <th>Shift Filled</th>
 
 
-<tbody id="shiftfilter">
+                <tbody id="shiftfilter">
 
-    <?php foreach ($loadshiftslot as $row) { ?>
-        <tr <?php if($row['amtpeople']-$row['count']> 0) { ?>class="notfullshift"<?php }else{ ?>class="fullshift" <?php } ?>>
-            <td><?= $row['start'] ?><?= $row['startampm'] ?>-<?= $row['end'] ?><?= $row['endampm'] ?></td>
-            <td><?= ($row['count'])  ?>/<?= ($row['amtpeople'])  ?></td>
-            
-        </tr>
-    <?php } ?>
+                    <?php foreach ($loadshiftslot as $row) { ?>
+                        <tr <?php if ($row['amtpeople'] - $row['count'] > 0) { ?>class="notfullshift" <?php } else { ?>class="fullshift" <?php } ?>>
+                            <td><?= $row['start'] ?><?= $row['startampm'] ?>-<?= $row['end'] ?><?= $row['endampm'] ?></td>
+                            <td><?= ($row['count'])  ?>/<?= ($row['amtpeople'])  ?></td>
 
-    </tbody> 
-</table>
+                        </tr>
+                    <?php } ?>
+
+                </tbody>
+            </table>
         </div>
 
 
@@ -73,7 +69,7 @@
 
 
 
-                        <td> <a type="button" class="btn btn-primary" href="<?= base_url() ?>index.php?/Admpendshift/pendaccept/<?= $row['pendingID']?>/<?= $day ?>/<?= $weekID ?>">Approved</a><button class="btn btn-danger" type='submit' class='like' id='decline' value=<?= $row['pendingID'] ?>>Decline</button></td>
+                        <td> <a type="button" class="btn btn-primary" href="<?= base_url() ?>index.php?/Admpendshift/pendaccept/<?= $row['pendingID'] ?>/<?= $day ?>/<?= $weekID ?>">Approved</a><button class="btn btn-danger" type='submit' class='like' id='decline' value=<?= $row['pendingID'] ?>>Decline</button></td>
 
                     </tr>
                 <?php } ?>
@@ -99,7 +95,7 @@
 
 
                         <td><?= $row['start'] ?><?= $row['startampm'] ?>-<?= $row['end'] ?><?= $row['endampm'] ?> </td>
-                      
+
                         <td><button class="btn btn-danger" type='submit' class='like' id='delete' value=<?= $row['openshiftID'] ?>>X</button></td>
 
 
@@ -167,7 +163,12 @@
     $(document).ready(function() {
 
         $(function() {
+
+            /**
+             *button to decline employee request off of a shift 
+             */
             $(document).on("click", '#decline', function() {
+                //ajax to remove pending request from user
                 var pendid = $(this).val();
                 $.ajax({
                     url: '<?php echo base_url(); ?>index.php/Admpendshift/penddecline',
@@ -182,34 +183,43 @@
 
                     }
                 });
+                //remove row from user request from table
                 $(this).closest('tr').remove();
 
 
             });
         });
 
+        /**
+         *button to delete an available shift from table and database 
+         */
         $(function() {
-    $(document).on("click", '#delete', function() {
-      var openshiftid = $(this).val();
-    
-      $.ajax({
-     url:'<?php echo base_url(); ?>index.php/Admpendshift/deleteopenshift',
-     method: 'post',
-     data: {openshiftID: openshiftid},
-     dataType: 'json',
-     success: function(response){
-        
-        
-     
-     }
-   });
-   $(this).closest('tr').remove();
-    });
-});
+            $(document).on("click", '#delete', function() {
+                var openshiftid = $(this).val();
+
+                $.ajax({
+                    url: '<?php echo base_url(); ?>index.php/Admpendshift/deleteopenshift',
+                    method: 'post',
+                    data: {
+                        openshiftID: openshiftid
+                    },
+                    dataType: 'json',
+                    success: function(response) {
 
 
-//filter shift slot
-$("#Inputshiftslot").on("keyup", function() {
+
+                    }
+                });
+                //remove data from table
+                $(this).closest('tr').remove();
+            });
+        });
+
+
+        /**
+         *input to filter through table depending on user input 
+         */
+        $("#Inputshiftslot").on("keyup", function() {
             var value = $(this).val().toLowerCase();
             $("#shiftfilter tr").filter(function() {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
@@ -219,4 +229,3 @@ $("#Inputshiftslot").on("keyup", function() {
 
     });
 </script>
-

@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Chat extends CI_Controller {
+class Chat extends CI_Controller
+{
 
   var $TPL;
 
@@ -12,45 +13,62 @@ class Chat extends CI_Controller {
     $this->load->model('users_model');
   }
 
+  /**
+   * display chat
+   */
   public function index()
   {
 
     $this->load->library('session');
-			$data2['test'] = $this->session->userdata('access');
-
-            
-
-            $memberdata = $this->session->userdata('memberIDE');
-            $data2['chatuser'] = $this->users_model->loadchatuser($memberdata);
+    //get name valye
+    $data2['test'] = $this->session->userdata('access');
 
 
+    //get memberID
+    $memberdata = $this->session->userdata('memberIDE');
 
-			
-    $this->template->show('chat',$data2);
+    //load all member to chat
+    $data2['chatuser'] = $this->users_model->loadchatuser($memberdata);
+
+
+
+    //display chat
+    $this->template->show('chat', $data2);
   }
 
- 
 
-public function messagehistory(){
-  // POST data
-  $senduser = $this->input->post();
-  $memberdata = $this->session->userdata('memberIDE');
+  /**
+   * display message history for user and chatter
+   */
+  public function messagehistory()
+  {
+    //get user chat value
+    $senduser = $this->input->post();
 
-  // get data
-  $data = $this->users_model->getmessagehistory($memberdata,$senduser);
+    //get memberid
+    $memberdata = $this->session->userdata('memberIDE');
 
- echo json_encode($data);
-}
+    // get message history of chat between users
+    $data = $this->users_model->getmessagehistory($memberdata, $senduser);
 
-public function messagesend(){
-  // POST data
-  $senduser = $this->input->post();
-  $memberdata = $this->session->userdata('memberIDE');
+    echo json_encode($data);
+  }
 
-  
-  // get data
-  $data = $this->users_model->domessagesend($memberdata,$senduser);
+  /**
+   * send new message data
+   */
+  public function messagesend()
+  {
+    //get new message
+    $senduser = $this->input->post();
 
- echo json_encode($data);
-}
+    //get memberID
+    $memberdata = $this->session->userdata('memberIDE');
+
+
+    //add message to table
+    $data = $this->users_model->domessagesend($memberdata, $senduser);
+
+    echo json_encode($data);
+  }
 }

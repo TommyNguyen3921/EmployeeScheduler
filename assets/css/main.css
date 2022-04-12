@@ -107,18 +107,8 @@ table{
   
 }
 
-.questionbox {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 30%;
-}
-.play {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 30%;
-}
+
+
 
 .boxes{
   display: inline-block; 
